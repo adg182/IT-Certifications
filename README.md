@@ -140,3 +140,7 @@ Certification versions and objectives change. Confirm provider guidance when sch
 Open **AWS** in the main navigation, then select **Study AWS flashcards**. Search by service or category, reveal the service definition and example, or turn on **Guess the service** to practice in reverse. Mark learned cards to focus on the remaining deck. Learned status is stored in the browser, and the deck works offline after the app finishes caching.
 
 The deck has one flashcard per entry in the [official CLF-C02 in-scope services list](https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/clf-02-in-scope-services.html), grouped by the exam guide’s service categories. The cards describe what each service does and when to use it. The [full exam guide](https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/) also covers concepts such as shared responsibility and pricing models.
+
+## CompTIA Security+ flashcards
+
+Open **CompTIA Security+** in the main navigation, then select **Study Security+ flashcards**. The deck includes 84 original cards, three per [SY0-701 exam objective](https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be). Search by topic or objective number, filter by domain, and switch to **Guess the term** to study the definitions in reverse. Learned progress is saved separately for each deck in this browser. Both decks work offline after the app finishes caching.

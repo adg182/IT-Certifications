@@ -1,4 +1,4 @@
-import {showFlashcards} from './flashcards.js';
+import {flashcardDecks, showFlashcards} from './flashcards.js';
 import {readContent, updateContent, readState, saveState, examState, createAttempt, isCorrect, score, finishAttempt, expireAttempts} from './core.js';
 
 const $ = s => document.querySelector(s);
@@ -21,7 +21,6 @@ function expire() {
   return false;
 }
 function go(next) { screen = next; render(); $('#main').focus(); window.scrollTo(0, 0); }
-const awsExamId = 'aws-cloud-practitioner';
 const examNavigation = $('#exam-navigation');
 let navigationMarkup = '';
 examNavigation?.addEventListener('click', event => {
@@ -55,7 +54,7 @@ function renderNavigation() {
       navigationMarkup = markup;
     }
     for (const button of examNavigation.querySelectorAll('button')) {
-      const current = screen !== 'history' && button.dataset.exam === (screen === 'flashcards' ? awsExamId : selected);
+      const current = screen !== 'history' && button.dataset.exam === selected;
       button.classList.toggle('active', current);
       button.setAttribute('aria-pressed', String(current));
     }
@@ -67,7 +66,7 @@ function renderNavigation() {
 function render() {
   if (screen === 'home' && content && !exam()) selected = content.catalog.exams[0]?.id;
   renderNavigation();
-  if (screen === 'flashcards') { showFlashcards($('#main')); return; }
+  if (screen === 'flashcards') { showFlashcards($('#main'), flashcardDecks.get(selected)); return; }
   if (!content && !Object.keys(state.exams).length) {
     $('#main').innerHTML = intro('Your study space is getting ready.', 'Connect to the internet for your first visit, then practice offline.') + '<button id="retry">Retry loading question banks</button>';
     $('#retry').onclick = sync; return;
@@ -79,6 +78,7 @@ function render() {
 }
 function renderHome() {
   const e = exam(), a = active(), b = bank();
+  const deck = flashcardDecks.get(selected);
   const history = state.exams[selected]?.history || [];
   if (b) {
     if (domain !== 'all' && !b.domains.some(d => d.id === domain)) domain = 'all';
@@ -87,11 +87,11 @@ function renderHome() {
     count = Math.min(Math.max(1, count || 1), available || b.questions.length);
   }
   $('#main').innerHTML = intro(esc(e?.name || 'Practice'), b ? `${b.questions.length} questions · ${b.domains.length} domains` : 'Connect to load this exam.', esc(e?.code || 'CERT PRACTICE')) +
-    (selected === awsExamId ? '<p><button id="open-aws-flashcards" class="secondary" type="button">Study AWS flashcards →</button></p>' : '') +
+    (deck ? `<p><button id="open-flashcards" class="secondary" type="button">${deck.buttonLabel} →</button></p>` : '') +
     (a ? `<section class="resume"><div><strong>You have a session in progress</strong><p>${esc(a.code)} · ${a.mode === 'timed' ? 'Timed exam' : 'Practice'} · ${Object.values(a.answers).filter(v => v.length).length}/${a.questions.length} answered · bank ${esc(a.version)}</p></div><button id="resume">Resume session →</button></section>` : '') +
     (b ? `<section class="setup"><div class="section-heading"><div><div class="eyebrow">MAKE IT YOURS</div><h2>Set up your session</h2></div><span class="pill">${esc(exam().code)}</span></div><div class="mode-grid"><button class="mode-card ${mode === 'practice' ? 'chosen' : ''}" data-mode="practice" aria-pressed="${mode === 'practice'}"><span aria-hidden="true">◎</span><strong>Practice mode</strong><small>Learn at your pace with instant explanations.</small></button><button class="mode-card ${mode === 'timed' ? 'chosen' : ''}" data-mode="timed" aria-pressed="${mode === 'timed'}"><span aria-hidden="true">◷</span><strong>Timed exam</strong><small>Test your readiness. Review answers at the end.</small></button></div><form id="setup-form"><div class="form-grid">${mode === 'practice' ? `<label>Focus area<select id="domain"><option value="all">All domains · mixed practice</option>${b.domains.map(d => `<option value="${esc(d.id)}" ${domain === d.id ? 'selected' : ''}>${esc(d.id)} · ${esc(d.name)}</option>`).join('')}</select></label>` : `<label>Time limit <span class="muted">(minutes)</span><input id="minutes" type="number" min="1" max="300" required value="${minutes}"></label>`}<label>Number of questions<input id="count" type="number" min="1" max="${b.questions.filter(q => mode === 'timed' || domain === 'all' || q.domain === domain).length}" value="${count}" required></label></div><div class="setup-bottom"><span>↳ Progress saves as you go.</span><button type="submit" ${a ? 'disabled' : ''}>Start ${mode === 'practice' ? 'practicing' : 'timed exam'} <span aria-hidden="true">→</span></button></div>${a ? '<p class="muted">Finish your active session before starting another for this exam.</p>' : ''}</form></section>` : '') +
     `<section class="study-tip"><span aria-hidden="true">✦</span><div><strong>Understanding beats memorizing.</strong><p>Every choice has an explanation. Use practice mode to learn why an answer works.</p></div></section><div class="dashboard-stats"><span><strong>${history.length}</strong> sessions completed</span><span><strong>${history.length ? Math.round(history.reduce((n, a) => n + score(a).percent, 0) / history.length) + '%' : '—'}</strong> average score</span><span><strong>On your terms</strong> online or offline</span></div><p class="fine-print">Starter banks cover every domain, with equal credit per question. This is independent practice, not an official exam or a prediction of your certification score.</p>`;
-  $('#open-aws-flashcards')?.addEventListener('click', () => go('flashcards'));
+  $('#open-flashcards')?.addEventListener('click', () => go('flashcards'));
   document.querySelectorAll('[data-mode]').forEach(btn => btn.onclick = () => { captureSetup(); mode = btn.dataset.mode; renderHome(); });
   if ($('#domain')) $('#domain').onchange = () => { captureSetup(); count = Math.min(count, b.questions.filter(q => domain === 'all' || q.domain === domain).length); renderHome(); };
   if ($('#resume')) $('#resume').onclick = () => { if (!expire()) screen = 'quiz'; render(); };

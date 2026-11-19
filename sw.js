@@ -1,6 +1,6 @@
 // Bump this cache name for each app-shell release. Bank updates need no SW change.
-const SHELL = 'cert-practice-shell-v6';
-const FILES = ['./', './index.html', './styles.css', './theme.js', './app.js', './flashcards.js', './flashcards/aws-services.json', './core.js', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+const SHELL = 'cert-practice-shell-v7';
+const FILES = ['./', './index.html', './styles.css', './theme.js', './app.js', './flashcards.js', './flashcards/aws-services.json', './flashcards/security-plus-sy0-701.json', './core.js', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(installShell());
 });
