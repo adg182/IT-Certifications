@@ -60,3 +60,33 @@
     padding: 8px 14px;
   }
 }
+
+.flash-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.flash-filters input {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--field);
+  color: var(--ink);
+}
+.flash-options, .flash-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 16px; }
+.flash-options label { display: inline-flex; align-items: center; min-height: 44px; gap: 5px; cursor: pointer; }
+.flash-options input { accent-color: var(--teal); }
+#flash-progress { margin: 16px 0 8px; }
+.flash-card { min-height: 190px; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--field); }
+.flash-card h2 { margin: 8px 0 16px; }
+#flash-back { margin-top: 16px; }
+#flash-docs { color: var(--teal); }
+#flash-availability { color: var(--amber); }
+#flash-learned[aria-pressed="true"] { background: var(--mint); color: var(--teal); }
+#flash-storage-status:empty { display: none; }
+@media (max-width: 700px) {
+  aside nav { flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  .flash-filters { grid-template-columns: 1fr; }
+  .flash-actions > button { flex: 1 1 auto; padding-inline: 10px; }
+}

@@ -1,6 +1,6 @@
 // Bump this cache name for each app-shell release. Bank updates need no SW change.
-const SHELL = 'cert-practice-shell-v2';
-const FILES = ['./', './index.html', './styles.css', './theme.js', './app.js', './core.js', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+const SHELL = 'cert-practice-shell-v3';
+const FILES = ['./', './index.html', './styles.css', './theme.js', './app.js', './flashcards.js', './flashcards/aws-services.json', './core.js', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(SHELL).then(cache => cache.addAll(FILES)));
   // No skipWaiting: an open attempt keeps its current app code until all tabs close.

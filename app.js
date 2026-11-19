@@ -1,3 +1,4 @@
+import {showFlashcards} from './flashcards.js';
 import {readContent, updateContent, readState, saveState, examState, createAttempt, isCorrect, score, finishAttempt, expireAttempts} from './core.js';
 
 const $ = s => document.querySelector(s);
@@ -21,6 +22,7 @@ function expire() {
 }
 function go(next) { screen = next; render(); $('#main').focus(); window.scrollTo(0, 0); }
 $('#nav-home').onclick = () => go('home');
+$('#nav-flashcards').onclick = () => go('flashcards');
 $('#nav-history').onclick = () => go('history');
 function exam() { return content?.catalog.exams.find(e => e.id === selected); }
 function bank() { return content?.banks[selected]; }
@@ -29,8 +31,10 @@ function intro(title, subtitle, eyebrow = 'YOUR CERTIFICATION JOURNEY') {
   return `<div class="intro"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${subtitle}</p></div>`;
 }
 function render() {
-  $('#nav-home').classList.toggle('active', screen !== 'history');
+  $('#nav-home').classList.toggle('active', ['home', 'quiz', 'results'].includes(screen));
   $('#nav-history').classList.toggle('active', screen === 'history');
+  $('#nav-flashcards').classList.toggle('active', screen === 'flashcards');
+  if (screen === 'flashcards') { showFlashcards($('#main')); return; }
   if (!content && !Object.keys(state.exams).length) {
     $('#main').innerHTML = intro('Your study space is getting ready.', 'Connect to the internet for your first visit, then practice offline.') + '<button id="retry">Retry loading question banks</button>';
     $('#retry').onclick = sync; return;

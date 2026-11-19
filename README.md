@@ -133,3 +133,10 @@ The questions were independently authored against these outlines:
 - [CompTIA Security+](https://www.comptia.org/en-us/certifications/security/): SY0-701 objectives; general security concepts, threats/vulnerabilities/mitigations, security architecture, security operations, and security program management/oversight.
 
 Certification versions and objectives change. Confirm provider guidance when scheduling an exam. AWS and CompTIA trademarks belong to their respective owners; this project is not affiliated with either provider.
+
+
+## AWS service flashcards
+
+Open **AWS flashcards** in the main navigation. Search by service or category, reveal the service definition and example, or turn on **Guess the service** to practice in reverse. Mark learned cards to focus on the remaining deck. Learned status is stored in the browser, and the deck works offline after the app finishes caching.
+
+The deck covers AWS services and selected tools and features from the [AWS Cloud Services catalog](https://aws.amazon.com/products/) and [AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html). It omits fully shut-down products and flags reviewed [maintenance-stage products](https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html). It is a maintained snapshot, not a live inventory of every API, regional variant, or Marketplace listing.
