@@ -41,7 +41,7 @@ The manifest defines a standalone app, relative start/scope, and PNG icons; an A
 
 ## How to practice
 
-- Select an exam card. **Practice mode** supports all domains or one domain, a question count, immediate feedback after **Check answer**, and revisiting questions. Checked practice answers are locked to preserve learning-session scores.
+- Choose an exam tab in the main navigation. **Practice mode** supports all domains or one domain, a question count, immediate feedback after **Check answer**, and revisiting questions. Checked practice answers are locked to preserve learning-session scores.
 - **Timed exam** supports a question count, 1–300 minutes, skipping, flagging, and a question navigator. Answers remain editable until final submission. Explanations appear only after submission. Incomplete multi-answer selections receive no credit.
 - The timer stores an absolute deadline. Closing the browser does not pause it. Browsers cannot execute JavaScript while closed; on reopening, an expired attempt is immediately finalized from its saved answers and its results are shown. The app also checks on visibility changes and before answer mutations.
 - Each question has equal credit. A multi-answer question is correct only when the selected IDs exactly match the full key; there is no partial credit. Unanswered questions score zero. Results show percentage, domain breakdown, and missed/unanswered review, with an option to review all questions.
@@ -103,7 +103,7 @@ The app downloads the catalog and all listed banks with `cache: no-store`. It va
 
 1. Create `content/example-cert/ex-100-v1.json` using the bank format above. Author original or properly licensed questions.
 2. Add the example catalog entry to `exams`.
-3. Run verification. Publish the new bank and catalog together. The exam card, domain picker, scoring, and history appear automatically.
+3. Run verification. Publish the new bank and catalog together. The exam tab, domain picker, scoring, and history appear automatically.
 
 ### App-shell changes
 
