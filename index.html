@@ -11,11 +11,21 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <script src="./theme.js"></script>
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="./"><span class="brandmark" aria-hidden="true">C<span>✓</span></span> Cert Practice</a><span class="header-note">A little practice. A lot more confidence.</span><span id="connection" class="pill">Device storage</span></header>
+  <header class="topbar"><a class="brand" href="./"><span class="brandmark" aria-hidden="true">C<span>✓</span></span> Cert Practice</a><span class="header-note">A little practice. A lot more confidence.</span><span id="connection" class="pill">Device storage</span>
+    <label class="theme-control">
+      <span class="sr-only">Color theme</span>
+      <select id="theme-picker">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </label>
+  </header>
   <div class="layout">
     <aside><div class="eyebrow">YOUR STUDY SPACE</div><nav aria-label="Main navigation"><button id="nav-home" class="nav active">▦ <span>Practice dashboard</span></button><button id="nav-history" class="nav">↺ <span>Attempt history</span></button></nav><div class="aside-note"><span class="small-mark">↗</span><strong>Keep moving forward.</strong><p>Learn the why behind each answer, one question at a time.</p></div><div class="private-note">Saved on this device.<br>No account needed.</div></aside>
     <main id="main" tabindex="-1"><div class="intro"><div class="eyebrow">LET’S BUILD YOUR CONFIDENCE</div><h1>Your next certification<br>starts here.</h1><p>Loading your study space…</p></div></main>
