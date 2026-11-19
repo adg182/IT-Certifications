@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142d32">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="A focused, offline-ready practice space for your next IT certification.">
+  <title>Cert Practice — IT Certifications</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./"><span class="brandmark" aria-hidden="true">C<span>✓</span></span> Cert Practice</a><span class="header-note">A little practice. A lot more confidence.</span><span id="connection" class="pill">Device storage</span></header>
+  <div class="layout">
+    <aside><div class="eyebrow">YOUR STUDY SPACE</div><nav aria-label="Main navigation"><button id="nav-home" class="nav active">▦ <span>Practice dashboard</span></button><button id="nav-history" class="nav">↺ <span>Attempt history</span></button></nav><div class="aside-note"><span class="small-mark">↗</span><strong>Keep moving forward.</strong><p>Learn the why behind each answer, one question at a time.</p></div><div class="private-note">Saved on this device.<br>No account needed.</div></aside>
+    <main id="main" tabindex="-1"><div class="intro"><div class="eyebrow">LET’S BUILD YOUR CONFIDENCE</div><h1>Your next certification<br>starts here.</h1><p>Loading your study space…</p></div></main>
+  </div>
+  <footer><span>Original practice questions · Independent study tool</span><span id="sync-status" role="status" aria-live="polite">Checking question banks…</span></footer>
+  <div id="notice" role="alert" hidden></div>
+  <noscript>This practice engine needs JavaScript enabled in your browser.</noscript>
+</body>
+</html>

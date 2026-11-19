@@ -1,0 +1,682 @@
+{
+  "schemaVersion": 1,
+  "examId": "comptia-security-plus",
+  "version": "sy0-701-v1",
+  "description": "Original beginner-friendly study questions. Independent practice, not official exam items. Covers every domain; not a complete objective bank or a weighted exam simulation.",
+  "sources": [
+    "https://www.comptia.org/en-us/certifications/security/"
+  ],
+  "domains": [
+    {
+      "id": "1",
+      "name": "General Security Concepts",
+      "weight": 12
+    },
+    {
+      "id": "2",
+      "name": "Threats, Vulnerabilities, and Mitigations",
+      "weight": 22
+    },
+    {
+      "id": "3",
+      "name": "Security Architecture",
+      "weight": 18
+    },
+    {
+      "id": "4",
+      "name": "Security Operations",
+      "weight": 28
+    },
+    {
+      "id": "5",
+      "name": "Security Program Management and Oversight",
+      "weight": 20
+    }
+  ],
+  "questions": [
+    {
+      "id": "sy0-701-001",
+      "domain": "1",
+      "objective": "1.1",
+      "type": "single",
+      "prompt": "A security camera records activity at a locked entrance for later investigation. What control function does the recording primarily provide?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Corrective",
+          "explanation": "A corrective control restores or fixes a condition after an event; recording alone does not repair it."
+        },
+        {
+          "id": "b",
+          "text": "Detective",
+          "explanation": "Recording helps detect and investigate activity that occurred at the entrance."
+        },
+        {
+          "id": "c",
+          "text": "Recovery",
+          "explanation": "Recovery restores service or data after disruption; a recording is not a restoration mechanism."
+        },
+        {
+          "id": "d",
+          "text": "Preventive only",
+          "explanation": "A camera may deter people, but recording activity primarily supports detection rather than physically blocking entry."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "sy0-701-002",
+      "domain": "1",
+      "objective": "1.2",
+      "type": "single",
+      "prompt": "A company grants users access only to the files needed for their assigned duties. Which principle does this demonstrate?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Least privilege",
+          "explanation": "Least privilege limits each identity to permissions necessary for its role or task."
+        },
+        {
+          "id": "b",
+          "text": "Implicit trust",
+          "explanation": "Implicit trust assumes access is safe without sufficient verification or restriction."
+        },
+        {
+          "id": "c",
+          "text": "Security through obscurity",
+          "explanation": "Hiding system details is not the same as enforcing limited permissions."
+        },
+        {
+          "id": "d",
+          "text": "Availability",
+          "explanation": "Availability concerns access to systems when needed, rather than minimizing permissions."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "sy0-701-003",
+      "domain": "1",
+      "objective": "1.4",
+      "type": "single",
+      "prompt": "A file publisher posts a trusted SHA-256 digest. A recipient calculates a different digest for the downloaded file. What is the most direct conclusion?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The file is encrypted with the wrong private key",
+          "explanation": "A hash mismatch does not establish that encryption or private keys were used."
+        },
+        {
+          "id": "b",
+          "text": "The recipient’s identity was authenticated",
+          "explanation": "Hashing a file does not authenticate the recipient."
+        },
+        {
+          "id": "c",
+          "text": "The downloaded bytes differ from the expected file",
+          "explanation": "A digest mismatch indicates the contents differ; it does not by itself explain whether the cause was malicious alteration or accidental corruption."
+        },
+        {
+          "id": "d",
+          "text": "The downloaded file is definitely safe",
+          "explanation": "A mismatch fails the integrity check and is not evidence of safety."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "sy0-701-004",
+      "domain": "2",
+      "objective": "2.2",
+      "type": "single",
+      "prompt": "An employee receives an unexpected text message asking them to sign in to a look-alike company website. What attack technique is this?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Tailgating",
+          "explanation": "Tailgating is unauthorized physical entry by following an authorized person."
+        },
+        {
+          "id": "b",
+          "text": "DNS zone transfer",
+          "explanation": "A zone transfer copies DNS records between servers; it is not a deceptive text-message lure."
+        },
+        {
+          "id": "c",
+          "text": "Shoulder surfing",
+          "explanation": "Shoulder surfing observes information over a person’s shoulder."
+        },
+        {
+          "id": "d",
+          "text": "Smishing",
+          "explanation": "Smishing is phishing through SMS or text messaging, often using a deceptive link."
+        }
+      ],
+      "correctAnswerIds": [
+        "d"
+      ]
+    },
+    {
+      "id": "sy0-701-005",
+      "domain": "2",
+      "objective": "2.4",
+      "type": "single",
+      "prompt": "A server suddenly has encrypted business files and a message demanding payment for a decryption key. Which threat best matches these indicators?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Ransomware",
+          "explanation": "Encrypting files and demanding payment is a common ransomware pattern."
+        },
+        {
+          "id": "b",
+          "text": "Normal compression",
+          "explanation": "Normal compression does not demand payment to restore access."
+        },
+        {
+          "id": "c",
+          "text": "Authorized vulnerability scanning",
+          "explanation": "Scanning looks for weaknesses; it should not encrypt business files or extort the owner."
+        },
+        {
+          "id": "d",
+          "text": "A routine DNS lookup",
+          "explanation": "DNS resolves names and does not account for encrypted files and a ransom demand."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "sy0-701-006",
+      "domain": "2",
+      "objective": "2.3",
+      "type": "single",
+      "prompt": "A web application joins user input directly into a database query. An attacker changes the query’s logic through a form field. Which vulnerability is being exploited?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "An unpatched wireless driver only",
+          "explanation": "The described failure is query construction, not a wireless driver vulnerability."
+        },
+        {
+          "id": "b",
+          "text": "SQL injection",
+          "explanation": "Untrusted input interpreted as SQL syntax can alter the intended database query."
+        },
+        {
+          "id": "c",
+          "text": "A physical access control failure",
+          "explanation": "The scenario concerns application input processing rather than building entry."
+        },
+        {
+          "id": "d",
+          "text": "Certificate expiration",
+          "explanation": "An expired certificate does not explain user input changing SQL logic."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "sy0-701-007",
+      "domain": "2",
+      "objective": "2.5",
+      "type": "multiple",
+      "prompt": "Which TWO actions help reduce the attack surface of an internet-facing server?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Disable unnecessary services",
+          "explanation": "Removing unneeded listeners reduces reachable code and potential entry points."
+        },
+        {
+          "id": "b",
+          "text": "Publish administrative ports to everyone for convenience",
+          "explanation": "Broad administrative access increases exposure and opportunities for attack."
+        },
+        {
+          "id": "c",
+          "text": "Apply tested security patches",
+          "explanation": "Patches can remove known vulnerabilities in software that must remain enabled."
+        },
+        {
+          "id": "d",
+          "text": "Turn off all authentication",
+          "explanation": "Removing authentication expands access rather than reducing the attack surface."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "id": "sy0-701-008",
+      "domain": "3",
+      "objective": "3.2",
+      "type": "single",
+      "prompt": "A public web server must be reachable from the internet, while the internal database must not accept direct internet connections. Which design fits best?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Place both systems on an unrestricted public subnet",
+          "explanation": "This exposes the database directly and fails the stated isolation goal."
+        },
+        {
+          "id": "b",
+          "text": "Allow every source to connect to every port",
+          "explanation": "Unrestricted rules remove the required access boundaries."
+        },
+        {
+          "id": "c",
+          "text": "Use separate network segments and permit only required flows",
+          "explanation": "A public-facing segment and a protected database segment enforce boundaries while allowing necessary application traffic."
+        },
+        {
+          "id": "d",
+          "text": "Disable database access controls because a firewall exists",
+          "explanation": "Layered controls remain necessary; one firewall is not a reason to remove database authorization."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "sy0-701-009",
+      "domain": "3",
+      "objective": "3.3",
+      "type": "multiple",
+      "prompt": "Which TWO controls best protect a sensitive backup copied to removable media?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Encrypt the backup with appropriately managed keys",
+          "explanation": "Encryption protects confidentiality if the media is lost, provided the keys remain protected."
+        },
+        {
+          "id": "b",
+          "text": "Write the decryption password on the media",
+          "explanation": "Storing the secret beside the ciphertext undermines confidentiality if the media is lost."
+        },
+        {
+          "id": "c",
+          "text": "Rename the file to a harmless-looking name",
+          "explanation": "Renaming does not prevent someone from reading the file contents."
+        },
+        {
+          "id": "d",
+          "text": "Restrict physical access and track custody of the media",
+          "explanation": "Physical controls and custody records limit unauthorized access and help account for the backup."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "d"
+      ]
+    },
+    {
+      "id": "sy0-701-010",
+      "domain": "3",
+      "objective": "3.4",
+      "type": "single",
+      "prompt": "A business can tolerate losing at most 30 minutes of transaction data after an outage. Which recovery measure is being specified?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Recovery time objective (RTO)",
+          "explanation": "RTO specifies the target time to restore service, not the acceptable interval of data loss."
+        },
+        {
+          "id": "b",
+          "text": "Recovery point objective (RPO)",
+          "explanation": "RPO defines how far back in time restored data may be, expressing the tolerated data-loss interval."
+        },
+        {
+          "id": "c",
+          "text": "Mean time to repair (MTTR)",
+          "explanation": "MTTR measures average repair duration rather than acceptable data loss."
+        },
+        {
+          "id": "d",
+          "text": "Annualized rate of occurrence (ARO)",
+          "explanation": "ARO estimates how often a loss event occurs per year."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "sy0-701-011",
+      "domain": "3",
+      "objective": "3.1",
+      "type": "single",
+      "prompt": "In a zero trust design, how should a request from a device already inside the office network be handled?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Automatically trust it because its IP address is internal",
+          "explanation": "Network location alone is not sufficient evidence of trust."
+        },
+        {
+          "id": "b",
+          "text": "Give it permanent administrator rights",
+          "explanation": "Permanent broad privileges contradict least privilege and continuous verification."
+        },
+        {
+          "id": "c",
+          "text": "Skip identity verification if it uses Wi-Fi",
+          "explanation": "A network connection method does not replace authentication and authorization."
+        },
+        {
+          "id": "d",
+          "text": "Verify identity and context, then grant only necessary access",
+          "explanation": "Zero trust evaluates requests using identity, device posture, and policy instead of assuming internal traffic is safe."
+        }
+      ],
+      "correctAnswerIds": [
+        "d"
+      ]
+    },
+    {
+      "id": "sy0-701-012",
+      "domain": "4",
+      "objective": "4.9",
+      "type": "single",
+      "prompt": "An authentication log shows 120 failed logins for user alex from one unfamiliar address, followed by one successful login from that address. What should an analyst investigate first?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Possible password guessing followed by account compromise",
+          "explanation": "Repeated failures followed by success are suspicious and warrant correlation with the user and other telemetry; the log alone is not proof."
+        },
+        {
+          "id": "b",
+          "text": "A confirmed hardware power failure",
+          "explanation": "The events describe authentication attempts and a success, not evidence of a power failure."
+        },
+        {
+          "id": "c",
+          "text": "A guaranteed false positive that needs no review",
+          "explanation": "The pattern could have a benign cause, but dismissing it without investigation would be unsafe."
+        },
+        {
+          "id": "d",
+          "text": "A successful backup completion",
+          "explanation": "There are no backup events in the described log."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "sy0-701-013",
+      "domain": "4",
+      "objective": "4.8",
+      "type": "single",
+      "prompt": "A responder confirms that a workstation is actively spreading malware. Which action best supports containment while preserving evidence?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Delete all logs immediately",
+          "explanation": "Deleting logs destroys useful evidence and does not reliably stop spread."
+        },
+        {
+          "id": "b",
+          "text": "Reconnect it to more networks to observe spread",
+          "explanation": "Increasing connectivity risks infecting additional systems."
+        },
+        {
+          "id": "c",
+          "text": "Isolate its network connection using approved response procedures",
+          "explanation": "Network isolation can limit spread while preserving the system for evidence collection under the response plan."
+        },
+        {
+          "id": "d",
+          "text": "Publish the user’s credentials in a group chat",
+          "explanation": "Sharing credentials creates further compromise and does not contain the incident."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "sy0-701-014",
+      "domain": "4",
+      "objective": "4.6",
+      "type": "multiple",
+      "prompt": "Which TWO combinations use distinct authentication factor categories?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A password and a PIN",
+          "explanation": "Both are knowledge factors, so this is not two distinct factor categories."
+        },
+        {
+          "id": "b",
+          "text": "A password and a hardware security key",
+          "explanation": "A password is something known; a security key is something possessed."
+        },
+        {
+          "id": "c",
+          "text": "Two different passwords",
+          "explanation": "Two passwords remain in the same knowledge category."
+        },
+        {
+          "id": "d",
+          "text": "A fingerprint and a hardware token",
+          "explanation": "A fingerprint is an inherence factor and a token is a possession factor."
+        }
+      ],
+      "correctAnswerIds": [
+        "b",
+        "d"
+      ]
+    },
+    {
+      "id": "sy0-701-015",
+      "domain": "4",
+      "objective": "4.3",
+      "type": "single",
+      "prompt": "A vulnerability scan reports a critical flaw on an internet-facing server. What should the security team do next?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Ignore it until every low-severity finding is fixed",
+          "explanation": "Exposure and potential impact make the critical finding a priority to evaluate."
+        },
+        {
+          "id": "b",
+          "text": "Validate the finding and prioritize remediation using exposure and business impact",
+          "explanation": "Validation avoids acting blindly, and risk-based prioritization accounts for exploitability, exposure, and business importance."
+        },
+        {
+          "id": "c",
+          "text": "Assume the scan proves exploitation already occurred",
+          "explanation": "A vulnerability finding identifies a weakness, not proof that an attacker exploited it."
+        },
+        {
+          "id": "d",
+          "text": "Disable all logging on the affected host",
+          "explanation": "Disabling logging removes visibility and does not fix the vulnerability."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "sy0-701-016",
+      "domain": "4",
+      "objective": "4.8",
+      "type": "single",
+      "prompt": "After restoring service following an incident, why should the team hold a lessons-learned review?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "To guarantee that no incident can ever happen again",
+          "explanation": "No review can guarantee that all future incidents are prevented."
+        },
+        {
+          "id": "b",
+          "text": "To replace the need for evidence collection",
+          "explanation": "Evidence collection supports the investigation and cannot be replaced by a meeting."
+        },
+        {
+          "id": "c",
+          "text": "To assign public blame before checking facts",
+          "explanation": "Blame without analysis undermines learning and does not improve response readiness."
+        },
+        {
+          "id": "d",
+          "text": "To identify response gaps and improve plans and controls",
+          "explanation": "Lessons learned convert experience into better detection, prevention, and response procedures."
+        }
+      ],
+      "correctAnswerIds": [
+        "d"
+      ]
+    },
+    {
+      "id": "sy0-701-017",
+      "domain": "5",
+      "objective": "5.2",
+      "type": "single",
+      "prompt": "A company buys cyber insurance to share the financial impact of certain incidents with an insurer. Which risk response is this?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Transfer",
+          "explanation": "Insurance transfers or shares specified financial consequences, while the organization still retains responsibilities and residual risk."
+        },
+        {
+          "id": "b",
+          "text": "Avoidance",
+          "explanation": "Avoidance stops the risky activity; buying insurance does not stop operations."
+        },
+        {
+          "id": "c",
+          "text": "Elimination of all risk",
+          "explanation": "Insurance does not prevent every incident or remove every consequence."
+        },
+        {
+          "id": "d",
+          "text": "Unrecorded acceptance",
+          "explanation": "The organization actively arranged financial protection rather than simply leaving the risk untreated."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "sy0-701-018",
+      "domain": "5",
+      "objective": "5.2",
+      "type": "single",
+      "prompt": "An event has a single loss expectancy of $10,000 and an annualized rate of occurrence of 0.2. What is its annualized loss expectancy?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "$50,000",
+          "explanation": "Dividing by the occurrence rate gives $50,000, but ALE uses multiplication."
+        },
+        {
+          "id": "b",
+          "text": "$10,000",
+          "explanation": "This is the loss per occurrence, not the expected annual loss at the given rate."
+        },
+        {
+          "id": "c",
+          "text": "$2,000",
+          "explanation": "ALE = SLE × ARO = $10,000 × 0.2 = $2,000 per year."
+        },
+        {
+          "id": "d",
+          "text": "$200",
+          "explanation": "Multiplying $10,000 by 0.2 gives $2,000, not $200."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "sy0-701-019",
+      "domain": "5",
+      "objective": "5.3",
+      "type": "multiple",
+      "prompt": "Before selecting a vendor to store sensitive customer records, which TWO activities best support third-party risk assessment?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Review the vendor’s relevant security evidence and audit reports",
+          "explanation": "Evidence helps assess whether controls meet the organization’s requirements; relevance and scope still need review."
+        },
+        {
+          "id": "b",
+          "text": "Assume the lowest price proves the strongest security",
+          "explanation": "Price alone provides no assurance about data protection controls."
+        },
+        {
+          "id": "c",
+          "text": "Define data-handling and incident-notification requirements in the agreement",
+          "explanation": "Explicit obligations help manage responsibilities and response expectations."
+        },
+        {
+          "id": "d",
+          "text": "Skip assessment because the vendor has a professional website",
+          "explanation": "Website appearance is not evidence of effective security controls."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "id": "sy0-701-020",
+      "domain": "5",
+      "objective": "5.1",
+      "type": "single",
+      "prompt": "A written document states what employees may and may not do with company systems. What is this document?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "A packet capture",
+          "explanation": "A packet capture records network traffic; it does not establish employee rules."
+        },
+        {
+          "id": "b",
+          "text": "An acceptable use policy",
+          "explanation": "An acceptable use policy sets expectations and restrictions for using organizational technology."
+        },
+        {
+          "id": "c",
+          "text": "A cryptographic private key",
+          "explanation": "A private key is cryptographic secret material, not a user conduct policy."
+        },
+        {
+          "id": "d",
+          "text": "A vulnerability signature",
+          "explanation": "A signature helps detect a weakness or threat pattern rather than defining acceptable employee behavior."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,677 @@
+{
+  "schemaVersion": 1,
+  "examId": "aws-cloud-practitioner",
+  "version": "clf-c02-v1",
+  "description": "Original beginner-friendly study questions. Independent practice, not official exam items. Covers every domain; not a complete objective bank or a weighted exam simulation.",
+  "sources": [
+    "https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/"
+  ],
+  "domains": [
+    {
+      "id": "1",
+      "name": "Cloud Concepts",
+      "weight": 24
+    },
+    {
+      "id": "2",
+      "name": "Security and Compliance",
+      "weight": 30
+    },
+    {
+      "id": "3",
+      "name": "Cloud Technology and Services",
+      "weight": 34
+    },
+    {
+      "id": "4",
+      "name": "Billing, Pricing, and Support",
+      "weight": 12
+    }
+  ],
+  "questions": [
+    {
+      "id": "clf-c02-001",
+      "domain": "1",
+      "objective": "1.1",
+      "type": "single",
+      "prompt": "An online store has large traffic spikes during sales. Which cloud benefit lets it add capacity during a sale and remove it afterward?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Elasticity",
+          "explanation": "Elasticity adjusts capacity as demand rises and falls, helping avoid idle resources after the sale."
+        },
+        {
+          "id": "b",
+          "text": "Buying peak capacity in advance",
+          "explanation": "Provisioning for the largest possible peak leaves paid capacity idle between sales."
+        },
+        {
+          "id": "c",
+          "text": "Running in one fixed-size server",
+          "explanation": "A fixed-size server cannot automatically grow with demand and shrink afterward."
+        },
+        {
+          "id": "d",
+          "text": "Disabling monitoring",
+          "explanation": "Monitoring helps detect demand; disabling it does not provide flexible capacity."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "clf-c02-002",
+      "domain": "1",
+      "objective": "1.2",
+      "type": "single",
+      "prompt": "A team wants its application to keep running if one data center fails. Which design is most appropriate?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Place all servers on one physical host",
+          "explanation": "One physical host creates a single point of failure."
+        },
+        {
+          "id": "b",
+          "text": "Deploy across multiple Availability Zones",
+          "explanation": "Availability Zones provide isolated locations within a Region. A properly designed multi-AZ application can tolerate a zone failure."
+        },
+        {
+          "id": "c",
+          "text": "Make a larger server in one Availability Zone",
+          "explanation": "A larger server increases capacity but does not protect against loss of its Availability Zone."
+        },
+        {
+          "id": "d",
+          "text": "Keep only one copy of the application data",
+          "explanation": "One copy increases the risk of losing access to data; redundancy is needed."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "clf-c02-003",
+      "domain": "1",
+      "objective": "1.3",
+      "type": "single",
+      "prompt": "A company moves its existing virtual machines to Amazon EC2 with minimal application changes. Which migration strategy is this?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Retire",
+          "explanation": "Retiring removes an application that is no longer needed rather than moving it."
+        },
+        {
+          "id": "b",
+          "text": "Refactor",
+          "explanation": "Refactoring changes the application architecture to use cloud capabilities more fully."
+        },
+        {
+          "id": "c",
+          "text": "Rehost",
+          "explanation": "Rehosting, often called lift and shift, moves an application with minimal changes."
+        },
+        {
+          "id": "d",
+          "text": "Retain",
+          "explanation": "Retaining keeps the application in its existing environment for now."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-004",
+      "domain": "1",
+      "objective": "1.4",
+      "type": "multiple",
+      "prompt": "Which TWO changes commonly occur when moving from owned servers to pay-as-you-go cloud resources?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Replace some upfront hardware spending with usage-based spending",
+          "explanation": "Cloud usage can shift capital expenditure toward operating expenditure."
+        },
+        {
+          "id": "b",
+          "text": "Eliminate every operating expense",
+          "explanation": "Cloud resources, support, networking, and administration can still incur expenses."
+        },
+        {
+          "id": "c",
+          "text": "Stop paying for unused compute after terminating eligible resources",
+          "explanation": "Terminating on-demand compute stops its compute usage charge; separately retained storage or other resources can still cost money."
+        },
+        {
+          "id": "d",
+          "text": "Guarantee every workload will cost less",
+          "explanation": "Savings depend on architecture, utilization, pricing choices, and operational discipline."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-005",
+      "domain": "1",
+      "objective": "1.2",
+      "type": "single",
+      "prompt": "Which action follows the reliability principle of testing recovery procedures?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Assume a successful backup guarantees recovery",
+          "explanation": "A backup can be unusable or incomplete; restoration needs verification."
+        },
+        {
+          "id": "b",
+          "text": "Remove all backup copies to reduce complexity",
+          "explanation": "Removing backups removes a recovery option and increases risk."
+        },
+        {
+          "id": "c",
+          "text": "Wait until a production outage to try restoring",
+          "explanation": "An outage is a poor time to discover that recovery steps do not work."
+        },
+        {
+          "id": "d",
+          "text": "Regularly restore a backup in a safe test environment",
+          "explanation": "Restore exercises validate both the backup and the documented recovery process before an outage."
+        }
+      ],
+      "correctAnswerIds": [
+        "d"
+      ]
+    },
+    {
+      "id": "clf-c02-006",
+      "domain": "2",
+      "objective": "2.1",
+      "type": "single",
+      "prompt": "A company runs a Linux server on Amazon EC2. Under shared responsibility, which task belongs to the customer?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Patch the guest operating system",
+          "explanation": "For EC2, customers manage their guest operating systems, applications, and configurations."
+        },
+        {
+          "id": "b",
+          "text": "Replace failed disks in the AWS data center",
+          "explanation": "AWS maintains the underlying physical infrastructure."
+        },
+        {
+          "id": "c",
+          "text": "Control physical entry to the AWS data center",
+          "explanation": "AWS is responsible for physical data center security."
+        },
+        {
+          "id": "d",
+          "text": "Patch the underlying virtualization host",
+          "explanation": "AWS manages the host infrastructure that supports EC2."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "clf-c02-007",
+      "domain": "2",
+      "objective": "2.3",
+      "type": "single",
+      "prompt": "An application on EC2 needs permission to read one S3 bucket. What is the best approach?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Embed the root account password in the application",
+          "explanation": "Root credentials are highly privileged and must not be embedded in code."
+        },
+        {
+          "id": "b",
+          "text": "Make every S3 bucket public",
+          "explanation": "Public access exposes data and does not follow least privilege."
+        },
+        {
+          "id": "c",
+          "text": "Attach an IAM role with limited S3 permissions to the instance",
+          "explanation": "An instance role supplies temporary credentials and can restrict access to the required bucket."
+        },
+        {
+          "id": "d",
+          "text": "Email a permanent administrator access key to every developer",
+          "explanation": "Long-lived administrator keys create unnecessary privilege and exposure."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-008",
+      "domain": "2",
+      "objective": "2.3",
+      "type": "multiple",
+      "prompt": "Which TWO practices help protect an AWS account?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Enable multi-factor authentication for the root user",
+          "explanation": "MFA adds a verification factor beyond a password for sensitive root access."
+        },
+        {
+          "id": "b",
+          "text": "Use the root user for daily administration",
+          "explanation": "Root should be reserved for tasks that require it, not routine work."
+        },
+        {
+          "id": "c",
+          "text": "Share one administrator identity with the whole team",
+          "explanation": "Shared identities reduce accountability and make access removal difficult."
+        },
+        {
+          "id": "d",
+          "text": "Grant only the permissions each role needs",
+          "explanation": "Least privilege limits damage from mistakes or compromised credentials."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "d"
+      ]
+    },
+    {
+      "id": "clf-c02-009",
+      "domain": "2",
+      "objective": "2.2",
+      "type": "single",
+      "prompt": "An auditor asks who changed a security group rule through an AWS API. Which service records this account activity?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Amazon Route 53",
+          "explanation": "Route 53 provides DNS and routing features, not a general API activity audit trail."
+        },
+        {
+          "id": "b",
+          "text": "AWS CloudTrail",
+          "explanation": "CloudTrail records AWS account API activity, including identity and request details for supported events."
+        },
+        {
+          "id": "c",
+          "text": "Amazon S3 Glacier storage classes",
+          "explanation": "Glacier storage classes support archival storage, not API event auditing by themselves."
+        },
+        {
+          "id": "d",
+          "text": "AWS Pricing Calculator",
+          "explanation": "Pricing Calculator estimates costs and does not record configuration changes."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "clf-c02-010",
+      "domain": "2",
+      "objective": "2.4",
+      "type": "single",
+      "prompt": "A compliance team needs AWS compliance reports and certain agreements. Which service should it use?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Amazon EC2 Auto Scaling",
+          "explanation": "Auto Scaling changes compute capacity; it is not the compliance report portal."
+        },
+        {
+          "id": "b",
+          "text": "AWS CloudFormation",
+          "explanation": "CloudFormation provisions resources from templates rather than providing AWS compliance reports."
+        },
+        {
+          "id": "c",
+          "text": "AWS Artifact",
+          "explanation": "Artifact provides on-demand access to AWS security and compliance reports and select agreements."
+        },
+        {
+          "id": "d",
+          "text": "Amazon CloudFront",
+          "explanation": "CloudFront delivers cached content near users; it does not provide compliance report access."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-011",
+      "domain": "2",
+      "objective": "2.1",
+      "type": "single",
+      "prompt": "A team stores private objects in S3. Which responsibility remains with the customer?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Maintaining physical S3 storage devices",
+          "explanation": "AWS operates and maintains the physical storage infrastructure."
+        },
+        {
+          "id": "b",
+          "text": "Controlling access to the AWS building",
+          "explanation": "Physical facility security is an AWS responsibility."
+        },
+        {
+          "id": "c",
+          "text": "Maintaining the S3 service operating system",
+          "explanation": "AWS manages the underlying software infrastructure for the managed S3 service."
+        },
+        {
+          "id": "d",
+          "text": "Configuring appropriate access permissions for the objects",
+          "explanation": "Customers control their data and must configure access policies to meet their requirements."
+        }
+      ],
+      "correctAnswerIds": [
+        "d"
+      ]
+    },
+    {
+      "id": "clf-c02-012",
+      "domain": "3",
+      "objective": "3.3",
+      "type": "single",
+      "prompt": "A small website needs virtual servers with control of the operating system. Which AWS service fits?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Amazon Athena",
+          "explanation": "Athena runs queries on data, commonly in S3, rather than hosting general-purpose virtual servers."
+        },
+        {
+          "id": "b",
+          "text": "Amazon EC2",
+          "explanation": "EC2 supplies virtual compute instances on which customers can manage the operating system."
+        },
+        {
+          "id": "c",
+          "text": "AWS Budgets",
+          "explanation": "Budgets tracks costs and usage against thresholds; it is not a compute host."
+        },
+        {
+          "id": "d",
+          "text": "Amazon Route 53",
+          "explanation": "Route 53 is a DNS service and does not run a guest operating system for the website."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "clf-c02-013",
+      "domain": "3",
+      "objective": "3.6",
+      "type": "single",
+      "prompt": "An application needs durable object storage for uploaded photos. Which service is the best fit?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Amazon S3",
+          "explanation": "S3 stores objects such as photos and supports durable storage at scale."
+        },
+        {
+          "id": "b",
+          "text": "Amazon EBS alone",
+          "explanation": "EBS is block storage for EC2, not a native object storage service."
+        },
+        {
+          "id": "c",
+          "text": "Amazon Route 53",
+          "explanation": "Route 53 resolves DNS names; it is not a file or object store."
+        },
+        {
+          "id": "d",
+          "text": "AWS IAM",
+          "explanation": "IAM manages access permissions rather than storing application photos."
+        }
+      ],
+      "correctAnswerIds": [
+        "a"
+      ]
+    },
+    {
+      "id": "clf-c02-014",
+      "domain": "3",
+      "objective": "3.4",
+      "type": "single",
+      "prompt": "A developer needs a managed relational database compatible with MySQL. Which service is appropriate?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Amazon CloudFront",
+          "explanation": "CloudFront is a content delivery network, not a relational database."
+        },
+        {
+          "id": "b",
+          "text": "Amazon DynamoDB",
+          "explanation": "DynamoDB is a NoSQL database rather than a MySQL-compatible relational database."
+        },
+        {
+          "id": "c",
+          "text": "Amazon RDS",
+          "explanation": "RDS manages relational database engines including MySQL, reducing infrastructure administration."
+        },
+        {
+          "id": "d",
+          "text": "Amazon SQS",
+          "explanation": "SQS queues messages between components; it is not a relational database."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-015",
+      "domain": "3",
+      "objective": "3.3",
+      "type": "single",
+      "prompt": "A function should run when a file arrives, without the team provisioning servers. Which service fits?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "AWS Direct Connect",
+          "explanation": "Direct Connect provides dedicated network connectivity; it does not execute application functions."
+        },
+        {
+          "id": "b",
+          "text": "Amazon EBS",
+          "explanation": "EBS provides block volumes and does not execute event-driven code."
+        },
+        {
+          "id": "c",
+          "text": "AWS Organizations",
+          "explanation": "Organizations governs multiple accounts rather than running functions."
+        },
+        {
+          "id": "d",
+          "text": "AWS Lambda",
+          "explanation": "Lambda runs code in response to supported events without customers provisioning or managing servers."
+        }
+      ],
+      "correctAnswerIds": [
+        "d"
+      ]
+    },
+    {
+      "id": "clf-c02-016",
+      "domain": "3",
+      "objective": "3.5",
+      "type": "multiple",
+      "prompt": "Which TWO services have the described networking roles?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Amazon VPC provides a logically isolated network for AWS resources",
+          "explanation": "VPC lets customers define network ranges, subnets, routes, and related controls."
+        },
+        {
+          "id": "b",
+          "text": "AWS IAM caches website images at edge locations",
+          "explanation": "IAM manages identities and permissions; CloudFront provides edge content delivery."
+        },
+        {
+          "id": "c",
+          "text": "Amazon Route 53 provides DNS services",
+          "explanation": "Route 53 can host DNS records and route clients to application endpoints."
+        },
+        {
+          "id": "d",
+          "text": "Amazon RDS supplies a dedicated physical network link from an office",
+          "explanation": "RDS is a database service; Direct Connect provides dedicated network connectivity."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-017",
+      "domain": "3",
+      "objective": "3.2",
+      "type": "single",
+      "prompt": "How do an AWS Region and an Availability Zone relate?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "An Availability Zone always spans multiple Regions",
+          "explanation": "An Availability Zone is contained within a single Region."
+        },
+        {
+          "id": "b",
+          "text": "A Region contains multiple isolated Availability Zones",
+          "explanation": "A Region is a geographic area containing multiple isolated Availability Zones."
+        },
+        {
+          "id": "c",
+          "text": "A Region is a single customer virtual network",
+          "explanation": "A VPC is a logical network; a Region is a geographic infrastructure area."
+        },
+        {
+          "id": "d",
+          "text": "They are two names for exactly the same thing",
+          "explanation": "Regions and Availability Zones are different infrastructure concepts."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    },
+    {
+      "id": "clf-c02-018",
+      "domain": "4",
+      "objective": "4.2",
+      "type": "single",
+      "prompt": "A team wants an alert when monthly AWS spending approaches a chosen amount. Which service should it configure?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "AWS CloudTrail",
+          "explanation": "CloudTrail records account activity rather than defining spending thresholds."
+        },
+        {
+          "id": "b",
+          "text": "Amazon Route 53",
+          "explanation": "Route 53 manages DNS, not monthly budget alerts."
+        },
+        {
+          "id": "c",
+          "text": "AWS Budgets",
+          "explanation": "Budgets supports cost or usage budgets and notifications when defined thresholds are reached or forecast."
+        },
+        {
+          "id": "d",
+          "text": "Amazon EC2 Auto Scaling",
+          "explanation": "Auto Scaling adjusts capacity; it does not provide a monthly spending-budget alert by itself."
+        }
+      ],
+      "correctAnswerIds": [
+        "c"
+      ]
+    },
+    {
+      "id": "clf-c02-019",
+      "domain": "4",
+      "objective": "4.2",
+      "type": "multiple",
+      "prompt": "Which TWO tools suit these cost-management tasks?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "AWS Pricing Calculator to estimate a planned architecture",
+          "explanation": "Pricing Calculator estimates charges from proposed service configurations before deployment."
+        },
+        {
+          "id": "b",
+          "text": "AWS Artifact to stop all charges at a dollar threshold",
+          "explanation": "Artifact supplies compliance resources and does not enforce a spending cap."
+        },
+        {
+          "id": "c",
+          "text": "AWS IAM to graph last month’s service spending",
+          "explanation": "IAM controls access; Cost Explorer is designed for spend analysis."
+        },
+        {
+          "id": "d",
+          "text": "AWS Cost Explorer to analyze historical costs",
+          "explanation": "Cost Explorer helps visualize and analyze cost and usage data over time."
+        }
+      ],
+      "correctAnswerIds": [
+        "a",
+        "d"
+      ]
+    },
+    {
+      "id": "clf-c02-020",
+      "domain": "4",
+      "objective": "4.1",
+      "type": "single",
+      "prompt": "A batch job can tolerate interruptions and restart later. Which EC2 pricing option can reduce compute cost by using spare capacity?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Dedicated Hosts solely for this discount",
+          "explanation": "Dedicated Hosts offer physical server allocation and licensing options, not the spare-capacity interruption model."
+        },
+        {
+          "id": "b",
+          "text": "Spot Instances",
+          "explanation": "Spot uses spare EC2 capacity at discounted rates, but AWS can interrupt the instances."
+        },
+        {
+          "id": "c",
+          "text": "On-Demand Instances with guaranteed zero cost",
+          "explanation": "On-Demand offers usage-based pricing, not guaranteed free compute."
+        },
+        {
+          "id": "d",
+          "text": "An S3 storage class",
+          "explanation": "S3 storage classes price stored objects, not EC2 compute capacity."
+        }
+      ],
+      "correctAnswerIds": [
+        "b"
+      ]
+    }
+  ]
+}
