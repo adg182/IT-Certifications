@@ -6,8 +6,8 @@
       "name": "AWS Certified Cloud Practitioner",
       "provider": "Amazon Web Services",
       "code": "CLF-C02",
-      "version": "clf-c02-v1",
-      "bank": "content/aws-cloud-practitioner/clf-c02-v1.json",
+      "version": "clf-c02-v2",
+      "bank": "content/aws-cloud-practitioner/clf-c02-v2.json",
       "defaultMinutes": 30
     },
     {

@@ -1,12 +1,12 @@
 # Local verification
 
-Verified November 18, 2026 against the static app at `http://localhost:8000/IT-Certifications/`. No changes were pushed and GitHub Pages settings were not changed.
+Local verification covers the CLF-C02 v2 bank and the SY0-701 starter bank.
 
-The full automated suite completed successfully in **Chromium (installed Google Chrome)** and **WebKit 27.2 (Playwright)**. Both used isolated browser storage. WebKit is the Safari engine; these are desktop engine tests with a 390-pixel mobile viewport, not tests on a physical iPhone.
+The full automated suite passed on the expanded bank in **Chromium (installed Google Chrome)** and **WebKit 27.2 (Playwright)**. After the final wording edits, the production engine validated, stored, and scored the entire 475-question bank. The browser rerun stopped before loading the app because the Playwright driver disconnected. Both used isolated browser storage. WebKit is the Safari engine; these are desktop engine tests with a 390-pixel mobile viewport, not tests on a physical iPhone.
 
 | Area | Verified behavior | Chromium | WebKit |
 | --- | --- | --- | --- |
-| Banks | Both exams load; 20 questions each; all four AWS and five Security+ domains represented; multi-answer items present | Pass | Pass |
+| Banks | Both exams load; 475 AWS questions and 20 Security+ questions; 25 distinct AWS prompts per task statement; multi-answer items present | Pass | Pass |
 | Practice | Both exams; domain filtering; question count; immediate explanations; checked answers lock | Pass | Pass |
 | Timed exam | Both exams; configured time/count; skip, flag, navigate, revisit; answers hidden until submission | Pass | Pass |
 | Scoring | Single answers; complete multi-answer keys regardless of order; no credit for partial, extra, duplicate, or unanswered choices | Pass | Pass |
@@ -22,20 +22,15 @@ The full automated suite completed successfully in **Chromium (installed Google 
 
 The optional test runner is `tests/verify.py`. Its release tests mock the fetch boundary without editing production banks, then restore normal fetch for real offline reloads. This avoids WebKit's automation-routing limitation around service-worker requests. Core validation is also exercised directly using the production `core.js` module and isolated in-memory storage. Screenshots are saved under ignored `test-results/`.
 
-The starter-bank coverage counts are:
+The question counts are shown below.
 
 | Exam | Questions per domain, in domain order |
 | --- | --- |
-| AWS CLF-C02 | 5 / 6 / 6 / 3 |
+| AWS CLF-C02 | 100 / 100 / 200 / 75 |
 | CompTIA SY0-701 | 3 / 4 / 4 / 5 / 4 |
 
-These cover every domain, but are not weighted replicas of the certification exams and do not cover every objective. Content was independently authored; no provider exam items were copied.
+Both banks cover every domain. AWS v2 covers all 19 official task statements, and the Security+ starter bank covers selected objectives. The questions are original practice material and the app samples them without exam weighting.
 
-## Remaining publishing and device checks
+## Device verification
 
-1. Obtain approval before pushing the new app to the existing repository's `main` branch and before changing Pages settings.
-2. Configure **Settings → Pages → Deploy from a branch → main → /(root)** and wait for deployment.
-3. Verify the live HTTPS URL: <https://adg182.github.io/IT-Certifications/>.
-4. On a real iPhone, use Safari's **Share → Add to Home Screen**, launch once online, then verify airplane-mode use, close/reopen behavior, and timer expiry in the installed app. Also confirm the icon and standalone presentation.
-
-Physical iPhone installation, Safari storage eviction/quota behavior, VoiceOver, live GitHub CDN propagation, and deployment have not been tested. Local browser checks do not establish these outcomes. Browser storage remains device- and origin-specific; there is no backup or cross-device sync.
+On a physical iPhone, open the [live site](https://adg182.github.io/IT-Certifications/) in Safari, add it to the Home Screen, and launch it online once. Airplane-mode use, Home Screen presentation, and VoiceOver still require checks on physical hardware.

@@ -51,7 +51,16 @@ async def main():
           let checks = 0;
           for (const e of live.catalog.exams) {
             const b = c.validateBank(live.banks[e.id],e);
-            assert(b.questions.length === 20, '20 questions');
+            if (e.code === 'CLF-C02') {
+              const objectives = ['1.1','1.2','1.3','1.4','2.1','2.2','2.3','2.4','3.1','3.2','3.3','3.4','3.5','3.6','3.7','3.8','4.1','4.2','4.3'];
+              assert(b.questions.length === 475, '475 AWS questions');
+              assert(new Set(b.questions.map(q => q.prompt.trim().toLowerCase())).size === 475, 'unique AWS prompts');
+              for (const id of objectives) {
+                assert(b.questions.filter(q => q.objective === id && q.domain === id.split('.')[0]).length === 25, '25 questions for ' + id);
+              }
+            } else {
+              assert(b.questions.length === 20, '20 Security+ questions');
+            }
             assert(new Set(b.questions.map(q=>q.domain)).size === b.domains.length,'domain coverage');
             assert(b.questions.some(q=>q.type==='multiple'),'multiple items');
             const q = b.questions.find(q=>q.type==='multiple');
@@ -139,8 +148,9 @@ async def main():
         assert await page.locator('.score-circle strong').inner_text()=='50%'
         print('PASS independent per-exam history and persisted result review')
 
-        # Partial multi-answer selection earns zero. Complete exact key earns full credit.
+        # Use the full Security+ bank to guarantee at least two multi-answer questions.
         await page.locator('#nav-home').click()
+        await page.locator('[data-exam="comptia-security-plus"]').click()
         await page.locator('[data-mode="timed"]').click()
         await page.locator('#count').fill('20')
         await page.locator('#setup-form button[type="submit"]').click()
@@ -185,7 +195,7 @@ async def main():
         await page.wait_for_selector('.banner')
         print('PASS foreground timer expiration')
 
-        # Pin a v1 session, then publish a valid v2 through network interception.
+        # Pin the current bank, then simulate two newer releases.
         await page.locator('#nav-home').click()
         await page.locator('[data-exam]').first.click()
         await page.locator('[data-mode="practice"]').click()
@@ -196,7 +206,7 @@ async def main():
         catalog=json.loads((ROOT/'content/catalog.json').read_text())
         exam=catalog['exams'][0]
         v2=json.loads((ROOT/exam['bank']).read_text())
-        exam['version']='clf-c02-v2'; exam['bank']='content/aws-cloud-practitioner/clf-c02-v2.json'
+        exam['version']='clf-c02-test-valid'; exam['bank']='content/aws-cloud-practitioner/clf-c02-test-valid.json'
         v2['version']=exam['version'];v2['questions'][0]['prompt']+=' (New release)'
         # WebKit's network routing can miss requests passing through a service
         # worker. Mock fetch at the page boundary so this release fixture works
@@ -217,27 +227,27 @@ async def main():
         })();""")
         await page.evaluate("release => sessionStorage.setItem('cert-practice-test-release',JSON.stringify(release))",{'catalog':catalog,'bank':v2})
         await page.reload()
-        await page.wait_for_function("JSON.parse(localStorage.getItem('cert-practice.content.v1')).banks['aws-cloud-practitioner'].version==='clf-c02-v2'")
+        await page.wait_for_function("JSON.parse(localStorage.getItem('cert-practice.content.v1')).banks['aws-cloud-practitioner'].version==='clf-c02-test-valid'")
         assert await active(page)==pinned
         await page.locator('#save-exit').click()
         await page.locator('#resume').click()
         await finish(page)
-        assert 'Bank clf-c02-v1' in await page.locator('.intro p').inner_text()
+        assert f"Bank {pinned['version']}" in await page.locator('.intro p').inner_text()
         await page.locator('#nav-home').click()
         await page.locator('#setup-form button[type="submit"]').click()
-        assert (await active(page))['version']=='clf-c02-v2'
+        assert (await active(page))['version']=='clf-c02-test-valid'
         print('PASS bank updates install for new attempts while active/history retain original version')
 
         # Invalid downloaded bank must leave all last-good data intact.
         badcatalog=json.loads(json.dumps(catalog))
-        badcatalog['exams'][0]['version']='clf-c02-v3'
-        badcatalog['exams'][0]['bank']='content/aws-cloud-practitioner/clf-c02-v3.json'
-        badbank=json.loads(json.dumps(v2));badbank['version']='clf-c02-v3';badbank['questions'][0]['correctAnswerIds']=['bad']
+        badcatalog['exams'][0]['version']='clf-c02-test-invalid'
+        badcatalog['exams'][0]['bank']='content/aws-cloud-practitioner/clf-c02-test-invalid.json'
+        badbank=json.loads(json.dumps(v2));badbank['version']='clf-c02-test-invalid';badbank['questions'][0]['correctAnswerIds']=['bad']
         await page.evaluate("release => sessionStorage.setItem('cert-practice-test-release',JSON.stringify(release))",{'catalog':badcatalog,'bank':badbank})
         await page.reload()
         await page.wait_for_function("document.querySelector('#sync-status').textContent.includes('last valid')")
-        assert await page.evaluate("JSON.parse(localStorage.getItem('cert-practice.content.v1')).banks['aws-cloud-practitioner'].version")=='clf-c02-v2'
-        assert (await active(page))['version']=='clf-c02-v2'
+        assert await page.evaluate("JSON.parse(localStorage.getItem('cert-practice.content.v1')).banks['aws-cloud-practitioner'].version")=='clf-c02-test-valid'
+        assert (await active(page))['version']=='clf-c02-test-valid'
         print('PASS invalid update rejected; cached banks and attempt preserved')
         await page.evaluate("sessionStorage.removeItem('cert-practice-test-release')")
         await page.evaluate("navigator.serviceWorker.ready.then(()=>true)")
@@ -245,7 +255,7 @@ async def main():
         await context.set_offline(True)
         await page.reload()
         await page.wait_for_selector('.question')
-        assert (await active(page))['version']=='clf-c02-v2'
+        assert (await active(page))['version']=='clf-c02-test-valid'
         await page.locator('#save-exit').click()
         await page.locator('[data-exam]').nth(1).click()
         await page.locator('#setup-form button[type="submit"]').click()

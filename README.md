@@ -1,6 +1,6 @@
 # IT Certification Practice
 
-A no-build, no-backend practice engine for iPhone Safari and desktop browsers. Includes 20 original beginner questions each for **AWS Certified Cloud Practitioner (CLF-C02)** and **CompTIA Security+ (SY0-701)**. Future exams use the same JSON format, with no exam-specific application code.
+A no-build, no-backend practice engine for iPhone Safari and desktop browsers. Includes 475 original practice questions for **AWS Certified Cloud Practitioner (CLF-C02)**, with 25 per official task statement, and 20 for **CompTIA Security+ (SY0-701)**. Future exams use the same JSON format, with no exam-specific application code.
 
 ## Preview locally
 
@@ -46,7 +46,7 @@ The manifest defines a standalone app, relative start/scope, and PNG icons; an A
 - The timer stores an absolute deadline. Closing the browser does not pause it. Browsers cannot execute JavaScript while closed; on reopening, an expired attempt is immediately finalized from its saved answers and its results are shown. The app also checks on visibility changes and before answer mutations.
 - Each question has equal credit. A multi-answer question is correct only when the selected IDs exactly match the full key; there is no partial credit. Unanswered questions score zero. Results show percentage, domain breakdown, and missed/unanswered review, with an option to review all questions.
 - One active attempt per exam is allowed. You can leave a session and practice another exam. Attempt history is grouped by exam and retains full results and explanations. History is saved only in this browser's local storage, never sent to GitHub.
-- Questions are shuffled without replacement. These small starter banks cover every domain, but do not cover every objective or reproduce official domain weighting, exam length, scaled scoring, or performance-based tasks. Percentages are practice scores, not official pass/fail predictions.
+- Questions are shuffled without replacement. Both banks cover every domain. The AWS bank covers all 19 task statements, and the Security+ starter bank covers selected objectives. Sessions use an unweighted sample and do not reproduce official exam length, scaled scoring, or performance-based tasks. Percentages are practice scores, not official pass/fail predictions.
 
 ## Content format
 
@@ -91,8 +91,8 @@ Use `type: "multiple"` and two or more `correctAnswerIds` for multi-answer items
 
 ### Update a question bank
 
-1. Copy `content/aws-cloud-practitioner/clf-c02-v1.json` to `clf-c02-v2.json` in the same folder.
-2. Change its `version` to `clf-c02-v2`, edit the questions, and preserve IDs for the same questions/choices.
+1. Copy `content/aws-cloud-practitioner/clf-c02-v2.json` to `clf-c02-v3.json` in the same folder.
+2. Change its `version` to `clf-c02-v3`, edit the questions, and preserve IDs for the same questions/choices.
 3. Update the AWS catalog entry's `version` and `bank` path to the new version.
 4. Validate and test, then commit the catalog and new bank together. Keep previous versioned files available.
 5. After publishing, reopening or foregrounding the app checks for updates. New sessions use the new bank; active and historical sessions keep their complete original snapshots.
