@@ -90,3 +90,5 @@
   .flash-filters { grid-template-columns: 1fr; }
   .flash-actions > button { flex: 1 1 auto; padding-inline: 10px; }
 }
+
+#exam-navigation { display: contents; }

@@ -42,7 +42,15 @@ async def main():
         await page.screenshot(path=str(OUT / f'{args.engine}-desktop.png'), full_page=True)
         assert await page.locator('[data-exam]').count() == 2
         assert await page.locator('[data-exam]').nth(0).get_attribute('aria-pressed') == 'true'
-        print('PASS initial load, two exam cards, desktop layout')
+        assert await page.get_by_role('heading', name='AWS Certified Cloud Practitioner').is_visible()
+        await page.get_by_role('button', name='CompTIA Security+', exact=True).click()
+        assert await page.get_by_role('heading', name='CompTIA Security+').is_visible()
+        assert await page.locator('#open-aws-flashcards').count() == 0
+        await page.get_by_role('button', name='AWS', exact=True).click()
+        await page.get_by_role('button', name='Study AWS flashcards').click()
+        await page.get_by_role('heading', name='AWS service flashcards').wait_for()
+        await page.get_by_role('button', name='AWS', exact=True).click()
+        print('PASS separate AWS and Security+ tabs and AWS flashcards entry')
         core = await page.evaluate('''async () => {
           const c = await import('./core.js');
           const live = c.readContent();
@@ -106,7 +114,6 @@ async def main():
         exam_ids = await page.locator('[data-exam]').evaluate_all('(xs)=>xs.map(x=>x.dataset.exam)')
         for exam_id in exam_ids:
             for mode in ['practice','timed']:
-                await page.locator('#nav-home').click()
                 await page.locator(f'[data-exam="{exam_id}"]').click()
                 await page.locator(f'[data-mode="{mode}"]').click()
                 if mode=='practice':
@@ -154,7 +161,6 @@ async def main():
         print('PASS independent per-exam history and persisted result review')
 
         # Keep the original first 20 question IDs in order for this multi-answer test.
-        await page.locator('#nav-home').click()
         await page.locator('[data-exam="comptia-security-plus"]').click()
         await page.locator('[data-mode="timed"]').click()
         await page.locator('#count').fill('20')
@@ -178,7 +184,7 @@ async def main():
         print('PASS multi-select instructions and exact-match UI scoring')
 
         # Reopen an expired session; its stored deadline must not restart.
-        await page.locator('#nav-home').click()
+        await page.locator('[data-exam="comptia-security-plus"]').click()
         await page.locator('[data-mode="timed"]').click()
         await page.locator('#count').fill('1')
         await page.locator('#setup-form button[type="submit"]').click()
@@ -205,7 +211,6 @@ async def main():
         print('PASS foreground timer expiration')
 
         # Pin the current bank, then simulate two newer releases.
-        await page.locator('#nav-home').click()
         await page.locator('[data-exam]').first.click()
         await page.locator('[data-mode="practice"]').click()
         await page.locator('#domain').select_option('all')
@@ -242,7 +247,7 @@ async def main():
         await page.locator('#resume').click()
         await finish(page)
         assert f"Bank {pinned['version']}" in await page.locator('.intro p').inner_text()
-        await page.locator('#nav-home').click()
+        await page.locator('[data-exam="aws-cloud-practitioner"]').click()
         await page.locator('#setup-form button[type="submit"]').click()
         assert (await active(page))['version']=='clf-c02-test-valid'
         print('PASS bank updates install for new attempts while active/history retain original version')
@@ -277,7 +282,7 @@ async def main():
 
         # Small touch viewport; no horizontal clipping or tiny answer targets.
         await page.set_viewport_size({'width':390,'height':844})
-        await page.locator('#nav-home').click()
+        await page.locator('[data-exam="aws-cloud-practitioner"]').click()
         await page.screenshot(path=str(OUT/f'{args.engine}-mobile.png'),full_page=True)
         assert await page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         await page.locator('[data-exam]').first.click()

@@ -137,6 +137,6 @@ Certification versions and objectives change. Confirm provider guidance when sch
 
 ## AWS service flashcards
 
-Open **AWS flashcards** in the main navigation. Search by service or category, reveal the service definition and example, or turn on **Guess the service** to practice in reverse. Mark learned cards to focus on the remaining deck. Learned status is stored in the browser, and the deck works offline after the app finishes caching.
+Open **AWS** in the main navigation, then select **Study AWS flashcards**. Search by service or category, reveal the service definition and example, or turn on **Guess the service** to practice in reverse. Mark learned cards to focus on the remaining deck. Learned status is stored in the browser, and the deck works offline after the app finishes caching.
 
 The deck covers AWS services and selected tools and features from the [AWS Cloud Services catalog](https://aws.amazon.com/products/) and [AWS General Reference](https://docs.aws.amazon.com/general/latest/gr/aws-service-information.html). It omits fully shut-down products and flags reviewed [maintenance-stage products](https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html). It is a maintained snapshot, not a live inventory of every API, regional variant, or Marketplace listing.

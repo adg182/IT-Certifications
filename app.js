@@ -21,8 +21,22 @@ function expire() {
   return false;
 }
 function go(next) { screen = next; render(); $('#main').focus(); window.scrollTo(0, 0); }
-$('#nav-home').onclick = () => go('home');
-$('#nav-flashcards')?.addEventListener('click', () => go('flashcards'));
+const awsExamId = 'aws-cloud-practitioner';
+const examNavigation = $('#exam-navigation');
+let navigationMarkup = '';
+examNavigation?.addEventListener('click', event => {
+  const button = event.target.closest('button[data-exam]');
+  const target = content?.catalog.exams.find(item => item.id === button?.dataset.exam);
+  if (!target) return;
+  if (target.id !== selected) {
+    selected = target.id;
+    mode = 'practice';
+    domain = 'all';
+    count = 10;
+    minutes = target.defaultMinutes;
+  }
+  go('home');
+});
 $('#nav-history').onclick = () => go('history');
 function exam() { return content?.catalog.exams.find(e => e.id === selected); }
 function bank() { return content?.banks[selected]; }
@@ -30,10 +44,29 @@ function active() { return state.exams[selected]?.active; }
 function intro(title, subtitle, eyebrow = 'YOUR CERTIFICATION JOURNEY') {
   return `<div class="intro"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${subtitle}</p></div>`;
 }
-function render() {
-  $('#nav-home').classList.toggle('active', ['home', 'quiz', 'results'].includes(screen));
+function renderNavigation() {
+  if (examNavigation) {
+    const names = {'aws-cloud-practitioner': 'AWS', 'comptia-security-plus': 'CompTIA Security+'};
+    const markup = (content?.catalog.exams || []).map(item =>
+      `<button type="button" class="nav" data-exam="${esc(item.id)}">${esc(names[item.id] || item.name)}</button>`
+    ).join('');
+    if (markup !== navigationMarkup) {
+      examNavigation.innerHTML = markup;
+      navigationMarkup = markup;
+    }
+    for (const button of examNavigation.querySelectorAll('button')) {
+      const current = screen !== 'history' && button.dataset.exam === (screen === 'flashcards' ? awsExamId : selected);
+      button.classList.toggle('active', current);
+      button.setAttribute('aria-pressed', String(current));
+    }
+  }
   $('#nav-history').classList.toggle('active', screen === 'history');
-  $('#nav-flashcards')?.classList.toggle('active', screen === 'flashcards');
+  $('#nav-history').setAttribute('aria-pressed', String(screen === 'history'));
+}
+
+function render() {
+  if (screen === 'home' && content && !exam()) selected = content.catalog.exams[0]?.id;
+  renderNavigation();
   if (screen === 'flashcards') { showFlashcards($('#main')); return; }
   if (!content && !Object.keys(state.exams).length) {
     $('#main').innerHTML = intro('Your study space is getting ready.', 'Connect to the internet for your first visit, then practice offline.') + '<button id="retry">Retry loading question banks</button>';
@@ -45,23 +78,20 @@ function render() {
   else renderHome();
 }
 function renderHome() {
-  const exams = content?.catalog.exams || [];
-  if (!exams.some(e => e.id === selected)) selected = exams[0]?.id;
-  const a = active(), b = bank(), allHistory = Object.values(state.exams).flatMap(e => e.history);
+  const e = exam(), a = active(), b = bank();
+  const history = state.exams[selected]?.history || [];
   if (b) {
     if (domain !== 'all' && !b.domains.some(d => d.id === domain)) domain = 'all';
     const available = b.questions.filter(q => mode === 'timed' || domain === 'all' || q.domain === domain).length;
     if (!available) domain = 'all';
     count = Math.min(Math.max(1, count || 1), available || b.questions.length);
   }
-  $('#main').innerHTML = intro('Your next certification<br>starts here.', 'Choose your exam. Find your rhythm. Make every question count.', 'LET’S BUILD YOUR CONFIDENCE') +
-    `<div class="section-heading"><h2>Choose your certification</h2><span>${exams.length} exams available</span></div><div class="exam-cards">${exams.map((e, i) => `<button class="exam-card ${selected === e.id ? 'selected' : ''}" data-exam="${esc(e.id)}" aria-pressed="${selected === e.id}"><span class="card-top"><span class="exam-icon ${i % 2 ? 'purple' : ''}" aria-hidden="true">${i % 2 ? '◇' : '☁'}</span><span class="exam-code">${esc(e.code)}</span><span class="selected-dot" aria-hidden="true">${selected === e.id ? '✓' : ''}</span></span><span class="provider">${esc(e.provider || 'CERTIFICATION')}</span><strong>${esc(e.name)}</strong><span class="card-bottom">${content.banks[e.id].questions.length} questions <span>·</span> ${content.banks[e.id].domains.length} domains <span class="card-arrow">↗</span></span></button>`).join('')}</div>` +
-    `<p><button id="open-aws-flashcards" class="secondary" type="button">Study AWS flashcards →</button></p>` +
+  $('#main').innerHTML = intro(esc(e?.name || 'Practice'), b ? `${b.questions.length} questions · ${b.domains.length} domains` : 'Connect to load this exam.', esc(e?.code || 'CERT PRACTICE')) +
+    (selected === awsExamId ? '<p><button id="open-aws-flashcards" class="secondary" type="button">Study AWS flashcards →</button></p>' : '') +
     (a ? `<section class="resume"><div><strong>You have a session in progress</strong><p>${esc(a.code)} · ${a.mode === 'timed' ? 'Timed exam' : 'Practice'} · ${Object.values(a.answers).filter(v => v.length).length}/${a.questions.length} answered · bank ${esc(a.version)}</p></div><button id="resume">Resume session →</button></section>` : '') +
     (b ? `<section class="setup"><div class="section-heading"><div><div class="eyebrow">MAKE IT YOURS</div><h2>Set up your session</h2></div><span class="pill">${esc(exam().code)}</span></div><div class="mode-grid"><button class="mode-card ${mode === 'practice' ? 'chosen' : ''}" data-mode="practice" aria-pressed="${mode === 'practice'}"><span aria-hidden="true">◎</span><strong>Practice mode</strong><small>Learn at your pace with instant explanations.</small></button><button class="mode-card ${mode === 'timed' ? 'chosen' : ''}" data-mode="timed" aria-pressed="${mode === 'timed'}"><span aria-hidden="true">◷</span><strong>Timed exam</strong><small>Test your readiness. Review answers at the end.</small></button></div><form id="setup-form"><div class="form-grid">${mode === 'practice' ? `<label>Focus area<select id="domain"><option value="all">All domains · mixed practice</option>${b.domains.map(d => `<option value="${esc(d.id)}" ${domain === d.id ? 'selected' : ''}>${esc(d.id)} · ${esc(d.name)}</option>`).join('')}</select></label>` : `<label>Time limit <span class="muted">(minutes)</span><input id="minutes" type="number" min="1" max="300" required value="${minutes}"></label>`}<label>Number of questions<input id="count" type="number" min="1" max="${b.questions.filter(q => mode === 'timed' || domain === 'all' || q.domain === domain).length}" value="${count}" required></label></div><div class="setup-bottom"><span>↳ Progress saves as you go.</span><button type="submit" ${a ? 'disabled' : ''}>Start ${mode === 'practice' ? 'practicing' : 'timed exam'} <span aria-hidden="true">→</span></button></div>${a ? '<p class="muted">Finish your active session before starting another for this exam.</p>' : ''}</form></section>` : '') +
-    `<section class="study-tip"><span aria-hidden="true">✦</span><div><strong>Understanding beats memorizing.</strong><p>Every choice has an explanation. Use practice mode to learn why an answer works.</p></div></section><div class="dashboard-stats"><span><strong>${allHistory.length}</strong> sessions completed</span><span><strong>${allHistory.length ? Math.round(allHistory.reduce((n, a) => n + score(a).percent, 0) / allHistory.length) + '%' : '—'}</strong> average score</span><span><strong>On your terms</strong> online or offline</span></div><p class="fine-print">Starter banks cover every domain, with equal credit per question. This is independent practice, not an official exam or a prediction of your certification score.</p>`;
-  $('#open-aws-flashcards').onclick = () => go('flashcards');
-  document.querySelectorAll('[data-exam]').forEach(btn => btn.onclick = () => { captureSetup(); selected = btn.dataset.exam; domain = 'all'; minutes = exam().defaultMinutes; count = Math.min(count, bank().questions.length); renderHome(); });
+    `<section class="study-tip"><span aria-hidden="true">✦</span><div><strong>Understanding beats memorizing.</strong><p>Every choice has an explanation. Use practice mode to learn why an answer works.</p></div></section><div class="dashboard-stats"><span><strong>${history.length}</strong> sessions completed</span><span><strong>${history.length ? Math.round(history.reduce((n, a) => n + score(a).percent, 0) / history.length) + '%' : '—'}</strong> average score</span><span><strong>On your terms</strong> online or offline</span></div><p class="fine-print">Starter banks cover every domain, with equal credit per question. This is independent practice, not an official exam or a prediction of your certification score.</p>`;
+  $('#open-aws-flashcards')?.addEventListener('click', () => go('flashcards'));
   document.querySelectorAll('[data-mode]').forEach(btn => btn.onclick = () => { captureSetup(); mode = btn.dataset.mode; renderHome(); });
   if ($('#domain')) $('#domain').onchange = () => { captureSetup(); count = Math.min(count, b.questions.filter(q => domain === 'all' || q.domain === domain).length); renderHome(); };
   if ($('#resume')) $('#resume').onclick = () => { if (!expire()) screen = 'quiz'; render(); };
