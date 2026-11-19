@@ -1,4 +1,4 @@
-const catalogUrl = 'https://aws.amazon.com/products/';
+const examGuideUrl = 'https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/clf-02-in-scope-services.html';
 const learnedKey = 'aws-flashcards.learned.v1';
 let deckRequest;
 let query = '';
@@ -29,7 +29,7 @@ function loadDeck() {
 
 export async function showFlashcards(main) {
   main.innerHTML = `
-    <div class="intro"><h1>AWS service flashcards</h1><p>Recall what a service does, then reveal an example of when to use it.</p></div>
+    <div class="intro"><h1>AWS CLF-C02 service flashcards</h1><p>Recall what an in-scope service does, then reveal an example of when to use it.</p></div>
     <section class="panel" aria-label="AWS flashcard deck"><p role="status">Loading AWS services…</p></section>
   `;
   const panel = main.querySelector('section');
@@ -72,7 +72,7 @@ function setupDeck(panel, cards) {
       <button type="button" id="flash-next">Next →</button>
     </div>
     <p id="flash-storage-status" class="muted" role="status"></p>
-    <p class="fine-print">Services and selected tools from AWS’s public catalog and documentation. Check <a href="${catalogUrl}">AWS</a> for new products and availability.</p>
+    <p class="fine-print">This deck follows the <a href="${examGuideUrl}">CLF-C02 in-scope services list</a>. Use the full exam guide for concepts and objectives.</p>
   `;
   const get = id => panel.querySelector('#flash-' + id);
   const search = get('search'), select = get('category'), filter = get('unlearned'), flip = get('reverse');
