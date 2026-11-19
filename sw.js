@@ -1,10 +1,17 @@
 // Bump this cache name for each app-shell release. Bank updates need no SW change.
-const SHELL = 'cert-practice-shell-v3';
+const SHELL = 'cert-practice-shell-v4';
 const FILES = ['./', './index.html', './styles.css', './theme.js', './app.js', './flashcards.js', './flashcards/aws-services.json', './core.js', './manifest.webmanifest', './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(SHELL).then(cache => cache.addAll(FILES)));
-  // No skipWaiting: an open attempt keeps its current app code until all tabs close.
+  event.waitUntil(installShell());
 });
+
+async function installShell() {
+  const cache = await caches.open(SHELL);
+  // Fetch the full release before taking over, including in browsers with older cached files.
+  await cache.addAll(FILES.map(path => new Request(new URL(path, self.registration.scope), {cache: 'reload'})));
+  // The next navigation uses the new shell. Existing pages are not reloaded.
+  await self.skipWaiting();
+}
 self.addEventListener('activate', event => {
   event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('cert-practice-shell-') && k !== SHELL).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });

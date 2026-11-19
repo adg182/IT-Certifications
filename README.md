@@ -107,7 +107,7 @@ The app downloads the catalog and all listed banks with `cache: no-store`. It va
 
 ### App-shell changes
 
-Bank releases do not need service worker changes. When changing HTML, JS, CSS, icons, or the manifest, **bump `SHELL` in `sw.js`** and update `FILES` if files are added. The new worker installs its full shell before activation and waits until existing controlled tabs close, so active sessions retain their app code. Close all app tabs/windows and reopen to activate a new shell. Bank snapshots are separate from the shell cache and survive cache cleanup. All required fonts and assets are local; no third-party requests are needed by the app.
+Bank releases do not need service worker changes. When changing HTML, JS, CSS, icons, or the manifest, **bump `SHELL` in `sw.js`** and update `FILES` if files are added. The new worker fetches and caches the full shell before activation. Open pages are not reloaded automatically. Refresh while online to load the new shell once it is ready. Bank snapshots are separate from the shell cache and survive cache cleanup. All required fonts and assets are local; no third-party requests are needed by the app.
 
 ## Verification
 
