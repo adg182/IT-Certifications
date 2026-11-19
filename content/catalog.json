@@ -15,8 +15,8 @@
       "name": "CompTIA Security+",
       "provider": "CompTIA",
       "code": "SY0-701",
-      "version": "sy0-701-v1",
-      "bank": "content/comptia-security-plus/sy0-701-v1.json",
+      "version": "sy0-701-v2",
+      "bank": "content/comptia-security-plus/sy0-701-v2.json",
       "defaultMinutes": 30
     }
   ]

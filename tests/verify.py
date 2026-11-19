@@ -59,7 +59,12 @@ async def main():
                 assert(b.questions.filter(q => q.objective === id && q.domain === id.split('.')[0]).length === 25, '25 questions for ' + id);
               }
             } else {
-              assert(b.questions.length === 20, '20 Security+ questions');
+              const objectives = [4,5,4,9,6].flatMap((n,i) => Array.from({length:n}, (_,j) => (i+1) + '.' + (j+1)));
+              assert(b.questions.length === 700, '700 Security+ questions');
+              assert(new Set(b.questions.map(q => q.prompt.trim().toLowerCase())).size === 700, 'unique Security+ prompts');
+              for (const id of objectives) {
+                assert(b.questions.filter(q => q.objective === id && q.domain === id.split('.')[0]).length === 25, '25 questions for ' + id);
+              }
             }
             assert(new Set(b.questions.map(q=>q.domain)).size === b.domains.length,'domain coverage');
             assert(b.questions.some(q=>q.type==='multiple'),'multiple items');
@@ -148,12 +153,16 @@ async def main():
         assert await page.locator('.score-circle strong').inner_text()=='50%'
         print('PASS independent per-exam history and persisted result review')
 
-        # Use the full Security+ bank to guarantee at least two multi-answer questions.
+        # Keep the original first 20 question IDs in order for this multi-answer test.
         await page.locator('#nav-home').click()
         await page.locator('[data-exam="comptia-security-plus"]').click()
         await page.locator('[data-mode="timed"]').click()
         await page.locator('#count').fill('20')
-        await page.locator('#setup-form button[type="submit"]').click()
+        await page.evaluate('() => { window.savedRandom = Math.random; Math.random = () => 0.999999999; }')
+        try:
+            await page.locator('#setup-form button[type="submit"]').click()
+        finally:
+            await page.evaluate('() => { Math.random = window.savedRandom; delete window.savedRandom; }')
         a=await active(page)
         multiples=[(i,q) for i,q in enumerate(a['questions']) if q['type']=='multiple']
         i,q=multiples[0]
