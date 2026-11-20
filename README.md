@@ -1,6 +1,14 @@
 # IT Certification Practice
 
-A no-build, no-backend practice engine for iPhone Safari and desktop browsers. Includes 475 original practice questions for **AWS Certified Cloud Practitioner (CLF-C02)**, with 25 per official task statement, and 700 for **CompTIA Security+ (SY0-701)**, with 25 per official objective. Future exams use the same JSON format, with no exam-specific application code.
+A no-build, no-backend practice engine for iPhone Safari and desktop browsers. Includes 475 original AWS Certified Cloud Practitioner (CLF-C02) questions, 700 CompTIA Security+ (SY0-701) questions, and 900 CompTIA A+ Core 2 (220-1202) questions. Each bank has 25 questions per numbered objective. Future exams use the same JSON format.
+
+## AWS timed exam
+
+Select **AWS → Timed exam** for a 65-question CLF-C02 simulation with a 90-minute countdown, a single question per view, flagging, and review filters for unanswered and flagged questions. The clock continues if the page closes. The 50 scored items follow the published domain weights, with 15 unscored items mixed in and identified only after submission. Review includes answer explanations and a raw practice percentage based on the scored items. AWS applies a separate scaled score to the official exam.
+
+## A+ Core 2
+
+Select **CompTIA A+ Core 2** to practice across all four domains or focus on one domain. Timed mode offers a configurable count and limit, with 90 minutes as the default.
 
 ## Preview locally
 
@@ -130,6 +138,7 @@ Tests exercise the production modules and UI, with isolated browser storage and 
 The questions were independently authored against these outlines:
 
 - [AWS CLF-C02 exam guide](https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/): four domains; cloud concepts, security/compliance, cloud technology/services, billing/pricing/support.
+- [CompTIA A+ Core 2 (220-1202) V15 objectives](https://lecbyo.files.cmp.optimizely.com/download/cefedfb2b8a511ef809306d06d323538)
 - [CompTIA Security+](https://www.comptia.org/en-us/certifications/security/): SY0-701 objectives; general security concepts, threats/vulnerabilities/mitigations, security architecture, security operations, and security program management/oversight.
 
 Certification versions and objectives change. Confirm provider guidance when scheduling an exam. AWS and CompTIA trademarks belong to their respective owners; this project is not affiliated with either provider.

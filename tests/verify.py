@@ -40,17 +40,21 @@ async def main():
         await page.goto(URL)
         await ready(page)
         await page.screenshot(path=str(OUT / f'{args.engine}-desktop.png'), full_page=True)
-        assert await page.locator('[data-exam]').count() == 2
+        assert await page.locator('[data-exam]').count() == 3
         assert await page.locator('[data-exam]').nth(0).get_attribute('aria-pressed') == 'true'
         assert await page.get_by_role('heading', name='AWS Certified Cloud Practitioner').is_visible()
         await page.get_by_role('button', name='CompTIA Security+', exact=True).click()
         assert await page.get_by_role('heading', name='CompTIA Security+').is_visible()
-        assert await page.locator('#open-aws-flashcards').count() == 0
+        await page.get_by_role('button', name='Study Security+ flashcards').click()
+        await page.get_by_role('heading', name='CompTIA Security+ SY0-701 flashcards').wait_for()
+        await page.get_by_role('button', name='CompTIA A+ Core 2', exact=True).click()
+        assert await page.get_by_role('heading', name='CompTIA A+ Core 2').is_visible()
+        assert await page.locator('#open-flashcards').count() == 0
         await page.get_by_role('button', name='AWS', exact=True).click()
         await page.get_by_role('button', name='Study AWS flashcards').click()
-        await page.get_by_role('heading', name='AWS service flashcards').wait_for()
+        await page.get_by_role('heading', name='AWS CLF-C02 service flashcards').wait_for()
         await page.get_by_role('button', name='AWS', exact=True).click()
-        print('PASS separate AWS and Security+ tabs and AWS flashcards entry')
+        print('PASS three exam tabs and both flashcard entries')
         core = await page.evaluate('''async () => {
           const c = await import('./core.js');
           const live = c.readContent();
@@ -67,9 +71,11 @@ async def main():
                 assert(b.questions.filter(q => q.objective === id && q.domain === id.split('.')[0]).length === 25, '25 questions for ' + id);
               }
             } else {
-              const objectives = [4,5,4,9,6].flatMap((n,i) => Array.from({length:n}, (_,j) => (i+1) + '.' + (j+1)));
-              assert(b.questions.length === 700, '700 Security+ questions');
-              assert(new Set(b.questions.map(q => q.prompt.trim().toLowerCase())).size === 700, 'unique Security+ prompts');
+              const lengths = e.code === '220-1202' ? [11,11,4,10] : [4,5,4,9,6];
+              const objectives = lengths.flatMap((n,i) => Array.from({length:n}, (_,j) => (i+1) + '.' + (j+1)));
+              const count = 25 * objectives.length;
+              assert(b.questions.length === count, 'unexpected question count for ' + e.code);
+              assert(new Set(b.questions.map(q => q.prompt.trim().toLowerCase())).size === count, 'unique prompts for ' + e.code);
               for (const id of objectives) {
                 assert(b.questions.filter(q => q.objective === id && q.domain === id.split('.')[0]).length === 25, '25 questions for ' + id);
               }
@@ -81,7 +87,18 @@ async def main():
             assert(!c.isCorrect(q,q.correctAnswerIds.slice(1)),'partial must fail');
             assert(!c.isCorrect(q,[...q.correctAnswerIds,q.choices.find(x=>!q.correctAnswerIds.includes(x.id)).id]),'extra must fail');
             assert(!c.isCorrect(q,[q.correctAnswerIds[0],q.correctAnswerIds[0]]),'duplicates must fail');
-            const a = c.createAttempt(e,b,{mode:'timed',count:20,minutes:1},1000);
+            if (e.simulation) {
+              const mock = c.createAttempt(e,b,{mode:'timed',count:1,minutes:1},1000);
+              assert(mock.questions.length === 65 && new Set(mock.questions.map(q=>q.id)).size === 65, '65 unique simulation items');
+              assert(mock.deadline === 5401000 && mock.unscoredIds.length === 15, '90 minutes and 15 unscored');
+              assert(mock.questions.filter(q=>q.type==='multiple').every(q=>q.choices.length>=5), 'multiple-response format');
+              mock.questions.forEach(q => mock.answers[q.id]=mock.unscoredIds.includes(q.id)?q.correctAnswerIds:[]);
+              const result = c.score(mock);
+              assert(result.total===50 && result.correct===0 && result.unanswered===50,'unscored items excluded');
+              assert(result.domains.map(d=>d.total).join(',')==='12,15,17,6','domain blueprint weights');
+            }
+            const custom = {...e, simulation: undefined};
+            const a = c.createAttempt(custom,b,{mode:'timed',count:20,minutes:1},1000);
             assert(new Set(a.questions.map(q=>q.id)).size===20,'without replacement');
             a.questions.forEach((q,i)=>a.answers[q.id]=i===0?[]:i===1?[q.choices.find(x=>!q.correctAnswerIds.includes(x.id)).id]:q.correctAnswerIds);
             const s = c.score(a);
@@ -116,16 +133,27 @@ async def main():
             for mode in ['practice','timed']:
                 await page.locator(f'[data-exam="{exam_id}"]').click()
                 await page.locator(f'[data-mode="{mode}"]').click()
+                simulation = exam_id == 'aws-cloud-practitioner' and mode == 'timed'
                 if mode=='practice':
                     await page.locator('#domain').select_option('1')
-                else:
+                elif not simulation:
                     await page.locator('#minutes').fill('7')
-                await page.locator('#count').fill('2')
+                if simulation:
+                    assert '65 questions · 90 minutes' in await page.locator('#setup-form').inner_text()
+                    assert await page.locator('#count, #minutes').count()==0
+                else:
+                    await page.locator('#count').fill('2')
                 await page.locator('#setup-form button[type="submit"]').click()
                 a = await active(page)
                 assert a['examId']==exam_id and a['mode']==mode
                 if mode=='practice': assert all(q['domain']=='1' for q in a['questions'])
-                q = a['questions'][0]
+                index = 0
+                if simulation:
+                    index = next(i for i,q in enumerate(a['questions']) if q['type']=='multiple' and q['id'] not in a['unscoredIds'])
+                    await page.locator(f'[data-index="{index}"]').click()
+                    assert await page.locator('input[name="answer"]').count()>=5
+                    assert 'Objective' not in await page.locator('.question-meta').inner_text()
+                q = a['questions'][index]
                 for aid in q['correctAnswerIds']:
                     await page.locator(f'input[name="answer"][value="{aid}"]').check()
                 await page.locator('#flag').click()
@@ -138,25 +166,36 @@ async def main():
                 if mode=='practice':
                     await page.locator('#check').click()
                     assert 'Correct' in await page.locator('.explanation h3').inner_text()
-                    assert await page.locator('input[name="answer"]:disabled').count()==4
+                    assert await page.locator('input[name="answer"]:disabled').count()==len(q['choices'])
                 else:
                     assert await page.locator('.explanation').count()==0
                     assert resumed['deadline']==a['deadline']
-                await page.locator('#next').click()
-                await page.locator('[data-index="0"]').click()
+                if simulation:
+                    await page.locator('#review-filter').select_option('flagged')
+                    assert await page.locator('[data-index]:visible').count()==1
+                    await page.locator(f'[data-index="{index}"]').click()
+                    await page.locator('#review-filter').select_option('unanswered')
+                    assert await page.locator('[data-index]:visible').count()==64
+                    await page.locator('#review-filter').select_option('all')
+                    await page.locator('[data-index="64"]').click()
+                    await page.locator('#next').click()
+                    assert await page.locator('#review-filter').evaluate('(el)=>el===document.activeElement')
+                else:
+                    await page.locator('#next').click()
+                    await page.locator('[data-index="0"]').click()
                 await finish(page)
-                assert await page.locator('.score-circle strong').inner_text()=='50%'
-                assert '1 unanswered' in await page.locator('.result-summary').inner_text()
-                assert await page.locator('.review-card').count()==1
+                assert await page.locator('.score-circle strong').inner_text()==('2%' if simulation else '50%')
+                assert ('49 unanswered' if simulation else '1 unanswered') in await page.locator('.result-summary').inner_text()
+                assert await page.locator('.review-card').count()==(64 if simulation else 1)
                 await page.locator('#review-toggle').click()
-                assert await page.locator('.review-card').count()==2
+                assert await page.locator('.review-card').count()==(65 if simulation else 2)
                 print(f'PASS {exam_id}: {mode}, domain/count settings, flags, skip/revisit, refresh/resume, results')
         await page.locator('#nav-history').click()
-        assert await page.locator('.history-item').count()==4
+        assert await page.locator('.history-item').count()==6
         panels=page.locator('.panel')
-        assert await panels.count()==2
-        for i in range(2): assert await panels.nth(i).locator('.history-item').count()==2
-        await page.locator('.history-item').first.click()
+        assert await panels.count()==3
+        for i in range(3): assert await panels.nth(i).locator('.history-item').count()==2
+        await panels.nth(1).locator('.history-item').first.click()
         assert await page.locator('.score-circle strong').inner_text()=='50%'
         print('PASS independent per-exam history and persisted result review')
 
@@ -199,12 +238,11 @@ async def main():
         await page.reload()
         await page.wait_for_selector('[data-exam]')
         histories=await page.evaluate("Object.values(JSON.parse(localStorage.getItem('cert-practice.attempts.v1')).exams).flatMap(e=>e.history).length")
-        assert histories==6
+        assert histories==8
         print('PASS closed-browser deadline expiry, automatic submission, no duplicate history')
 
-        # A running foreground timer also submits without a user click.
+        # A running foreground AWS simulation also submits without a user click.
         await page.locator('[data-mode="timed"]').click()
-        await page.locator('#count').fill('1')
         await page.locator('#setup-form button[type="submit"]').click()
         await page.evaluate('''async()=>{const c=await import('./core.js');const s=c.readState();for(const e of Object.values(s.exams))if(e.active)e.active.deadline=Date.now()+600;c.saveState(s);window.dispatchEvent(new StorageEvent('storage',{key:c.STATE_KEY}));}''')
         await page.wait_for_selector('.banner')
@@ -271,9 +309,9 @@ async def main():
         await page.wait_for_selector('.question')
         assert (await active(page))['version']=='clf-c02-test-valid'
         await page.locator('#save-exit').click()
-        await page.locator('[data-exam]').nth(1).click()
+        await page.locator('[data-exam="comptia-a-plus-core-2"]').click()
         await page.locator('#setup-form button[type="submit"]').click()
-        assert (await active(page))['examId']=='comptia-security-plus'
+        assert (await active(page))['examId']=='comptia-a-plus-core-2'
         await page.reload()
         await page.wait_for_selector('.question')
         await finish(page)

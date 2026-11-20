@@ -13,6 +13,14 @@ export function validateCatalog(c) {
     check(safeId(e.id) && /^[a-z0-9-]+$/.test(e.id), 'Invalid exam ID');
     check(/^content\/[a-z0-9/-]+\.json$/.test(e.bank) && !e.bank.includes('..'), 'Bank must use a local content path');
     check(Number.isFinite(e.defaultMinutes) && e.defaultMinutes > 0, 'Invalid default time');
+    if (e.simulation !== undefined) {
+      const {minutes, unscored, scoredByDomain} = e.simulation || {};
+      check(Number.isInteger(minutes) && minutes >= 1 && minutes <= 300, 'Invalid simulation time');
+      check(Number.isInteger(unscored) && unscored >= 0, 'Invalid unscored count');
+      check(scoredByDomain && typeof scoredByDomain === 'object' && !Array.isArray(scoredByDomain) &&
+        Object.keys(scoredByDomain).length > 0 && Object.entries(scoredByDomain).every(([id, count]) =>
+          safeId(id) && Number.isInteger(count) && count > 0), 'Invalid domain quotas');
+    }
   }
   return c;
 }
@@ -28,6 +36,14 @@ export function validateBank(b, exam) {
     for (const c of q.choices) check(safeId(c.id) && nonempty(c.text) && nonempty(c.explanation), 'Invalid choice or missing explanation');
     check(Array.isArray(q.correctAnswerIds) && unique(q.correctAnswerIds) && q.correctAnswerIds.length > 0 && q.correctAnswerIds.length < q.choices.length && q.correctAnswerIds.every(id => q.choices.some(c => c.id === id)), 'Invalid answer key');
     check(q.type === 'single' ? q.correctAnswerIds.length === 1 : q.correctAnswerIds.length >= 2, 'Answer count/type mismatch');
+  }
+  if (exam.simulation) {
+    const {scoredByDomain, unscored} = exam.simulation;
+    const quotas = Object.entries(scoredByDomain);
+    check(quotas.every(([id, count]) => b.questions.filter(q => q.domain === id).length >= count),
+      'Question bank cannot meet simulation domain quotas');
+    check(b.questions.length >= unscored + quotas.reduce((total, [, count]) => total + count, 0),
+      'Question bank cannot fill the simulation');
   }
   return b;
 }
@@ -80,13 +96,30 @@ export function shuffled(items, random = Math.random) {
   return a;
 }
 export function createAttempt(exam, bank, {mode, domain = 'all', count, minutes}, now = Date.now()) {
-  const pool = bank.questions.filter(q => domain === 'all' || q.domain === domain);
   check(['practice', 'timed'].includes(mode), 'Choose a valid mode');
-  check(Number.isInteger(count) && count > 0 && count <= pool.length, 'Choose an available question count');
-  check(mode !== 'timed' || (Number.isFinite(minutes) && minutes >= 1 && minutes <= 300), 'Time must be 1–300 minutes');
+  const simulation = mode === 'timed' && exam.simulation;
+  let questions, unscoredIds;
+  if (simulation) {
+    const scored = Object.entries(simulation.scoredByDomain).flatMap(([id, quota]) => {
+      const pool = shuffled(bank.questions.filter(q => q.domain === id));
+      // Keep both item formats represented when the bank has multiple-response questions.
+      const multiple = pool.find(q => q.type === 'multiple');
+      return multiple ? [multiple, ...pool.filter(q => q !== multiple).slice(0, quota - 1)] : pool.slice(0, quota);
+    });
+    const scoredIds = new Set(scored.map(q => q.id));
+    const unscored = shuffled(bank.questions.filter(q => !scoredIds.has(q.id))).slice(0, simulation.unscored);
+    unscoredIds = unscored.map(q => q.id);
+    questions = shuffled([...scored, ...unscored]);
+    minutes = simulation.minutes;
+  } else {
+    const pool = bank.questions.filter(q => domain === 'all' || q.domain === domain);
+    check(Number.isInteger(count) && count > 0 && count <= pool.length, 'Choose an available question count');
+    check(mode !== 'timed' || (Number.isFinite(minutes) && minutes >= 1 && minutes <= 300), 'Time must be 1–300 minutes');
+    questions = shuffled(pool).slice(0, count);
+  }
   return JSON.parse(JSON.stringify({id: crypto.randomUUID(), examId: exam.id, examName: exam.name, code: exam.code, version: bank.version,
     domains: bank.domains, mode, startedAt: now, deadline: mode === 'timed' ? now + minutes * 60000 : null,
-    questions: shuffled(pool).slice(0, count), answers: {}, checked: {}, flags: {}, index: 0, completedAt: null}));
+    questions, unscoredIds, answers: {}, checked: {}, flags: {}, index: 0, completedAt: null}));
 }
 export function isCorrect(q, selected = []) {
   return selected.length === q.correctAnswerIds.length && unique(selected) && q.correctAnswerIds.every(id => selected.includes(id));
@@ -94,12 +127,15 @@ export function isCorrect(q, selected = []) {
 export function score(attempt) {
   const domains = attempt.domains.map(d => ({...d, total: 0, correct: 0, unanswered: 0}));
   let correct = 0, unanswered = 0;
+  const unscored = new Set(attempt.unscoredIds);
+  const total = attempt.questions.length - unscored.size;
   for (const q of attempt.questions) {
+    if (unscored.has(q.id)) continue;
     const d = domains.find(d => d.id === q.domain), a = attempt.answers[q.id] || [];
     d.total++; if (!a.length) { unanswered++; d.unanswered++; }
     if (isCorrect(q, a)) { correct++; d.correct++; }
   }
-  return {correct, unanswered, total: attempt.questions.length, percent: Math.round(correct / attempt.questions.length * 100), domains: domains.filter(d => d.total)};
+  return {correct, unanswered, total, percent: Math.round(correct / total * 100), domains: domains.filter(d => d.total)};
 }
 export function finishAttempt(state, id, reason = 'submitted', now = Date.now()) {
   const e = examState(state, id), a = e.active;
